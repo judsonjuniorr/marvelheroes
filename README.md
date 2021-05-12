@@ -57,7 +57,7 @@
 
 Descrição em breve...
 
-### Built With
+### Feito com ❤ e
 
 - [Create React App](https://create-react-app.dev/)
 - [TypeScript](https://create-react-app.dev/docs/adding-typescript/)
@@ -72,6 +72,7 @@ Para baixar uma cópia do projeto e ter ela rodando em sua máquina, siga o pass
 
 Aqui temos uma lista das aplicações que são necessárias para ter seu projeto rodando.
 
+- [Chave de uso da API](https://developer.marvel.com/signup)
 - [Node.JS](https://nodejs.org/en/)
 - npm
   ```sh
@@ -90,9 +91,14 @@ Aqui temos uma lista das aplicações que são necessárias para ter seu projeto
    ```
 3. Instale os pacotes utilizados na aplicação
    ```sh
-   npm install
+    npm install
    ```
-4. <strong>Dê inicio</strong> a uma experiência única
+4. Copie o conteúdo do arquivo .env.example para um novo arquivo nomeado .env e substitua o valor das 2 chaves de acesso com as geradas no processo anterior
+   ```dosini
+    REACT_APP_PUBLIC_KEY=sua-chave-publica
+    REACT_APP_PRIVATE_KEY=sua-chave-privada
+   ```
+5. <strong>Dê inicio</strong> a uma experiência única
    ```sh
    npm run start
    ```

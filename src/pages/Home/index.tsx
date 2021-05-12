@@ -1,6 +1,6 @@
-import logo from "assets/logo.svg";
+import logo from 'assets/logo.svg'
 
-import * as S from "./styles";
+import * as S from './styles'
 
 const Home: React.FC = () => {
   return (
@@ -19,7 +19,7 @@ const Home: React.FC = () => {
         </S.AppLink>
       </S.AppHeader>
     </S.App>
-  );
-};
+  )
+}
 
-export default Home;
+export default Home

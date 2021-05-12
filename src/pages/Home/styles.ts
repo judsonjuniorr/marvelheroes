@@ -1,8 +1,8 @@
-import styled, { keyframes } from 'styled-components';
+import styled, { keyframes } from 'styled-components'
 
 export const App = styled.div`
   text-align: center;
-`;
+`
 
 export const AppHeader = styled.header`
   background-color: #282c34;

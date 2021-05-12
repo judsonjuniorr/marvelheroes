@@ -1,5 +1,5 @@
-import { BrowserRouter } from "react-router-dom";
-import Routes from "routes";
+import { BrowserRouter } from 'react-router-dom'
+import Routes from 'routes'
 
 import GlobalStyles from 'styles/global'
 
@@ -9,7 +9,7 @@ const App: React.FC = () => {
       <Routes />
       <GlobalStyles />
     </BrowserRouter>
-  );
-};
+  )
+}
 
-export default App;
+export default App

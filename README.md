@@ -61,6 +61,7 @@ Descrição em breve...
 
 - [Create React App](https://create-react-app.dev/)
 - [TypeScript](https://create-react-app.dev/docs/adding-typescript/)
+- [Redux](https://redux.js.org/)
 
 <!-- GETTING STARTED -->
 

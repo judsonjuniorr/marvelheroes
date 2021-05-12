@@ -1,8 +1,11 @@
 import logo from 'assets/logo.svg'
+import useDocumentTitle from 'helpers/useDocumentTitle'
 
 import * as S from './styles'
 
 const Home: React.FC = () => {
+  useDocumentTitle()
+
   return (
     <S.App>
       <S.AppHeader>

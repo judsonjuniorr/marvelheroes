@@ -1,46 +1,120 @@
-# Getting Started with Create React App
+<div align="center">
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+[![LinkedIn][linkedin-shield]][linkedin-url]
 
-## Available Scripts
+</div>
 
-In the project directory, you can run:
+<!-- PROJECT LOGO -->
+<br />
+<p align="center">
+  <a href="https://github.com/judsonjuniorr/marvelheroes">
+    <img src="images/logo.png" alt="Logo" width="80" height="80">
+  </a>
 
-### `yarn start`
+  <h3 align="center">Marvel Heroes</h3>
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+  <p align="center">
+    <br />
+    <i>"A única maneira de saber o quão forte você é, é continuar testando seus limites."</i>
+    <br >
+    <small style="opacity: 0.7">Clark Kent / Kal-El (Superman)</small>
+    <br />
+    <br />
+    <a href="https://github.com/judsonjuniorr/marvelheroes"><strong>Visualizar demo</strong></a>
+  </p>
+</p>
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+<!-- TABLE OF CONTENTS -->
+<details open="open">
+  <summary><h2 style="display: inline-block">Guia de conteúdo</h2></summary>
+  <ol>
+    <li>
+      <a href="#about-the-project">Sobre o projeto</a>
+      <ul>
+        <li><a href="#built-with">Criado com</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#getting-started">Começando</a>
+      <ul>
+        <li><a href="#prerequisites">Pré-requisitos</a></li>
+        <li><a href="#installation">Instalação</a></li>
+      </ul>
+    </li>
+    <li><a href="#usage">Uso</a></li>
+    <li><a href="#contact">Contato</a></li>
+    <li><a href="#acknowledgements">Referências</a></li>
+  </ol>
+</details>
 
-### `yarn test`
+<!-- ABOUT THE PROJECT -->
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Sobre o projeto
 
-### `yarn build`
+<!-- Foto da aplicação -->
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+[![Marvel Heroes][product-screenshot]][demo-url]
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Descrição em breve...
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Built With
 
-### `yarn eject`
+- [Create React App](https://create-react-app.dev/)
+- [TypeScript](https://create-react-app.dev/docs/adding-typescript/)
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+<!-- GETTING STARTED -->
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Começando
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+Para baixar uma cópia do projeto e ter ela rodando em sua máquina, siga o passo-a-passo abaixo
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+### Pré-requisitos
 
-## Learn More
+Aqui temos uma lista das aplicações que são necessárias para ter seu projeto rodando.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- [Node.JS](https://nodejs.org/en/)
+- npm
+  ```sh
+    npm install npm -g
+  ```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Instalação
+
+1. Clone o repositório
+   ```sh
+   git clone https://github.com/judsonjuniorr/marvel.git
+   ```
+2. Entre na pasta do projeto
+   ```sh
+   cd marvel
+   ```
+3. Instale os pacotes utilizados na aplicação
+   ```sh
+   npm install
+   ```
+4. <strong>Dê inicio</strong> a uma experiência única
+   ```sh
+   npm run start
+   ```
+
+<!-- Exemplos de uso -->
+
+## Uso
+
+Em breve descrições de como utilizar a ferramenta...
+
+<!-- Referências -->
+
+## Referências
+
+- []()
+- []()
+- []()
+
+<!-- MARKDOWN LINKS -->
+<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+
+[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
+[linkedin-url]: https://linkedin.com/in/judsonjuniorr
+[product-screenshot]: images/screenshot.png
+[demo-url]: https://github.com/judsonjuniorr/marvelheroes

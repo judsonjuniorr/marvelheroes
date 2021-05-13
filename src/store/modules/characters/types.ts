@@ -26,6 +26,7 @@ export interface ICharacter {
 export interface ICharactersState {
   characters: ICharacter[]
   page: number
+  maxPages: number
   perPage: number
   total: number
   loading: boolean

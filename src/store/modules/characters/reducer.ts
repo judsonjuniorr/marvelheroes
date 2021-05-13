@@ -6,6 +6,7 @@ import { ActionTypes, ICharactersState } from './types'
 const INITIAL_STATE: ICharactersState = {
   characters: [],
   page: 1,
+  maxPages: 1,
   perPage: 30,
   total: 0,
   loading: true,
@@ -27,6 +28,7 @@ const characters: Reducer<ICharactersState> = (
       case ActionTypes.loadAllCharactersSuccess: {
         Object.assign(draft, {
           characters: payload.characters,
+          maxPages: Math.ceil(payload.total / draft.perPage),
           total: payload.total ?? 0,
           loadError: false,
           loading: false

@@ -58,7 +58,7 @@ export const Main = styled.header`
   position: relative;
   display: flex;
   flex-direction: column;
-  min-height: 60vh;
+  min-height: max(60vh, 530px);
   overflow: hidden;
   padding-top: 30px;
 
@@ -206,12 +206,29 @@ export const Logo = styled.img`
 `
 
 export const Content = styled.div`
-  background: #fffeff;
-  background-image: linear-gradient(152deg, #fffeff 00%, #ebeef6 100%);
+  padding-top: 50px;
+  padding-bottom: 70px;
   height: 100%;
   min-height: 100%;
   width: 100%;
   display: flex;
   flex-direction: column;
   flex: 1;
+`
+
+export const Section = styled.section`
+  + section {
+    margin-top: 30px;
+  }
+
+  > strong {
+    font-family: 'Roboto Condensed', sans-serif;
+    color: #b3bdd3;
+    font-size: 20px;
+    display: flex;
+  }
+  small {
+    color: #737987;
+    margin-left: 10px;
+  }
 `

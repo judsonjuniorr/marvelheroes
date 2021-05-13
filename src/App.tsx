@@ -1,5 +1,7 @@
 import { Provider } from 'react-redux'
 import { BrowserRouter } from 'react-router-dom'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.min.css'
 
 import Routes from 'routes'
 import store from 'store'
@@ -11,6 +13,7 @@ const App: React.FC = () => (
     <BrowserRouter>
       <Routes />
       <GlobalStyles />
+      <ToastContainer />
     </BrowserRouter>
   </Provider>
 )

@@ -5,7 +5,11 @@ import createSagaMiddleware from 'redux-saga'
 import rootReducer from './modules/rootReducer'
 import rootSaga from './modules/rootSaga'
 
-export interface IState {}
+import { ICharactersState } from './modules/characters/types'
+
+export interface IState {
+  characters: ICharactersState
+}
 
 const sagaMiddleware = createSagaMiddleware()
 const middlewares = [sagaMiddleware]

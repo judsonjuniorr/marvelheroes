@@ -20,6 +20,8 @@ export default createGlobalStyle`
     font-family: 'Roboto', 'Oxygen', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    background: #121620;
+    color: #535761;
   }
 
   #root {

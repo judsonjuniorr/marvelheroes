@@ -24,12 +24,13 @@ module.exports = {
   rules: {
     'prettier/prettier': ['error', { singleQuote: true }],
     'react-hooks/rules-of-hooks': 'error',
-    'react-hooks/exhaustive-deps': 'warn',
     'react/jsx-filename-extension': [1, { extensions: ['.tsx'] }],
     'react/react-in-jsx-scope': 'off',
     'import/no-unresolved': 'error',
     'import/named': 'off',
     'react/prop-types': 'off',
+    'no-shadow': 'off',
+    '@typescript-eslint/no-shadow': ['error'],
     'react/jsx-props-no-spreading': 'off',
     'react/require-default-props': 'off',
     'import/prefer-default-export': 'off',
@@ -44,7 +45,11 @@ module.exports = {
       }
     ],
     'no-unused-vars': 'off',
-    '@typescript-eslint/no-unused-vars': [2, { argsIgnorePattern: '_' }]
+    '@typescript-eslint/no-unused-vars': [2, { argsIgnorePattern: '_' }],
+    'react-hooks/exhaustive-deps': [
+      'warn',
+      { enableDangerousAutofixThisMayCauseInfiniteLoops: true }
+    ]
   },
   settings: {
     'import/parsers': {

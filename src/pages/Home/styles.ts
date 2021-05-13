@@ -58,7 +58,7 @@ export const Main = styled.header`
   position: relative;
   display: flex;
   flex-direction: column;
-  min-height: min(60vh, 650px);
+  min-height: 60vh;
   overflow: hidden;
   padding-top: 30px;
 

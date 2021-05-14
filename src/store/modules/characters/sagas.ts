@@ -7,8 +7,8 @@ import { ActionTypes, ICharacter } from './types'
 import {
   loadAllCharactersFailure,
   loadAllCharactersRequest,
-  loadAllCharactersSuccess
-  // ILoadCharactersSuccess
+  loadAllCharactersSuccess,
+  ILoadCharactersSuccess
 } from './actions/loadAllCharacters'
 
 type LoadAllCharactersRequest = ReturnType<typeof loadAllCharactersRequest>
@@ -35,12 +35,12 @@ function* loadAllCharacters({ payload }: LoadAllCharactersRequest) {
       })
   }
 
-  // const cached = sessionStorage.getItem(`@marvelheroes/characters:page:${page}`)
-  // if (cached) {
-  //   const cachedResult = JSON.parse(cached) as ILoadCharactersSuccess
-  //   yield put(loadAllCharactersSuccess(cachedResult))
-  //   return
-  // }
+  const cached = sessionStorage.getItem(`@marvelheroes/characters:page:${page}`)
+  if (cached) {
+    const cachedResult = JSON.parse(cached) as ILoadCharactersSuccess
+    yield put(loadAllCharactersSuccess(cachedResult))
+    return
+  }
 
   try {
     const charactersRequest: AxiosResponse<ILoadCharactersResponse> =

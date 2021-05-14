@@ -52,6 +52,11 @@ const superManAnimation = keyframes`
   }
 `
 
+const rotate = keyframes`
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+`
+
 export const Wrapper = styled.div`
   flex: 1;
   display: flex;
@@ -268,6 +273,10 @@ export const CharacterItem = styled.li<ICharacterItemProps>`
   .thumbnail {
     width: 100%;
     object-fit: cover;
+
+    &.skeleton-load {
+      height: 100%;
+    }
   }
 
   .description {
@@ -296,10 +305,24 @@ export const CharacterItem = styled.li<ICharacterItemProps>`
       z-index: 2;
       color: #b3bdd3;
       font-weight: 500;
+
+      &.skeleton-load {
+        height: 1em;
+        width: 90%;
+        display: block;
+      }
     }
 
     .series {
       color: #737987;
+
+      &.skeleton-load {
+        height: 1em;
+        width: 60%;
+        margin-top: 3px;
+        display: block;
+      }
+
       strong {
         color: #2a75b3;
       }
@@ -370,6 +393,10 @@ export const CharacterItem = styled.li<ICharacterItemProps>`
       svg.hover {
         width: 0;
       }
+
+      .loading {
+        animation: ${rotate} 2s linear infinite;
+      }
     }
 
     &:hover > button {
@@ -377,7 +404,7 @@ export const CharacterItem = styled.li<ICharacterItemProps>`
       cursor: pointer;
       color: #b3bdd3;
 
-      svg:not(.hover) {
+      svg:not(.hover):not(.loading) {
         width: 0;
       }
       svg.hover {

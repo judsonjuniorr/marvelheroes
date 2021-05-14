@@ -1,4 +1,9 @@
-import { createGlobalStyle } from 'styled-components'
+import { createGlobalStyle, keyframes } from 'styled-components'
+
+const skeletonLoad = keyframes`
+  from { left: -150px; }
+  to { left: 100%; }
+`
 
 export default createGlobalStyle`
   *,
@@ -37,4 +42,22 @@ export default createGlobalStyle`
 
   h1, h2, h3, h4, h5, h6, strong { font-weight: 600; }
   button { cursor: pointer; }
+
+  .skeleton-load {
+    position: relative;
+    overflow: hidden;
+    background-color: #777;
+
+    &:before {
+      content: '';
+      display: block;
+      position: absolute;
+      left: -150px;
+      top: 0;
+      height: 100%;
+      width: 150px;
+      background: linear-gradient(to right, transparent 0%, #888 50%, transparent 100%);
+      animation: ${skeletonLoad} 2s infinite;
+    }
+  }
 `

@@ -4,8 +4,10 @@ import {
   FaAngleLeft,
   FaAngleDoubleLeft
 } from 'react-icons/fa'
+import { ImSpinner9 } from 'react-icons/im'
 import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { Link, useHistory } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import LazyLoad from 'react-lazyload'
 
@@ -25,7 +27,6 @@ import spiderMan from 'assets/spider-man.png'
 import greenLantern from 'assets/green-lantern.png'
 import captainWonderWoman from 'assets/captain-and-wonder-woman.png'
 
-import { Link, useHistory } from 'react-router-dom'
 import * as S from './styles'
 
 const Home: React.FC = () => {
@@ -34,7 +35,7 @@ const Home: React.FC = () => {
   const history = useHistory()
   useDocumentTitle()
 
-  const { loadError, total, characters, page, maxPages } = useSelector<
+  const { loadError, total, characters, page, maxPages, loading } = useSelector<
     IState,
     ICharactersState
   >(state => state.characters)
@@ -93,11 +94,26 @@ const Home: React.FC = () => {
     })
   }, [characters])
 
+  const skeletonList = useMemo(() => {
+    return [...Array(28).keys()].map(key => {
+      return (
+        <S.CharacterItem key={key}>
+          <div className="thumbnail skeleton-load" />
+          <div className="description">
+            <span className="name skeleton-load" />
+            <div className="series skeleton-load" />
+          </div>
+        </S.CharacterItem>
+      )
+    })
+  }, [])
+
   const handlePrevPage = useCallback(() => {
+    if (loading) return
     history.replace(`/?page=${page - 1}`)
     dispatch(loadAllCharactersRequest(page - 1))
     contentRef.current?.scrollIntoView()
-  }, [dispatch, history, page])
+  }, [dispatch, history, loading, page])
 
   const prevPage = useMemo(
     () =>
@@ -106,8 +122,14 @@ const Home: React.FC = () => {
           <button type="button" onClick={handlePrevPage}>
             <span>Página anterior</span>
             <div className="iconWrapper">
-              <FaAngleDoubleLeft className="icon hover" size={19} />
-              <FaAngleLeft className="icon" size={19} />
+              {loading ? (
+                <ImSpinner9 className="loading" size={22} />
+              ) : (
+                <>
+                  <FaAngleDoubleLeft className="icon hover" size={19} />
+                  <FaAngleLeft className="icon" size={19} />
+                </>
+              )}
             </div>
             <span className="pages">
               {page}/{maxPages}
@@ -115,14 +137,15 @@ const Home: React.FC = () => {
           </button>
         </S.CharacterItem>
       ),
-    [handlePrevPage, maxPages, page]
+    [handlePrevPage, loading, maxPages, page]
   )
 
   const handleNextPage = useCallback(() => {
+    if (loading) return
     history.replace(`/?page=${page + 1}`)
     dispatch(loadAllCharactersRequest(page + 1))
     contentRef.current?.scrollIntoView()
-  }, [dispatch, history, page])
+  }, [dispatch, history, loading, page])
 
   const nextPage = useMemo(
     () =>
@@ -131,8 +154,14 @@ const Home: React.FC = () => {
           <button type="button" onClick={handleNextPage}>
             <span>Prox. Página</span>
             <div className="iconWrapper">
-              <FaAngleRight className="icon" size={19} />
-              <FaAngleDoubleRight className="icon hover" size={19} />
+              {loading ? (
+                <ImSpinner9 className="loading" size={22} />
+              ) : (
+                <>
+                  <FaAngleRight className="icon" size={19} />
+                  <FaAngleDoubleRight className="icon hover" size={19} />
+                </>
+              )}
             </div>
             <span className="pages">
               {page}/{maxPages}
@@ -140,7 +169,7 @@ const Home: React.FC = () => {
           </button>
         </S.CharacterItem>
       ),
-    [handleNextPage, maxPages, page]
+    [handleNextPage, loading, maxPages, page]
   )
 
   return (
@@ -172,7 +201,7 @@ const Home: React.FC = () => {
 
             <ul>
               {prevPage}
-              {characterList}
+              {loading ? skeletonList : characterList}
               {nextPage}
             </ul>
           </S.Section>

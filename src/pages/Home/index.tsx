@@ -66,7 +66,12 @@ const Home: React.FC = () => {
 
       return (
         <S.CharacterItem key={character.id}>
-          <Link to={`/character/${character.id}`}>
+          <Link
+            to={{
+              pathname: `/character/${character.id}`,
+              state: { name: character.name }
+            }}
+          >
             <LazyLoad offset={50}>
               <img
                 src={`${character.thumbnail.path}/portrait_xlarge.${character.thumbnail.extension}`}
@@ -78,15 +83,12 @@ const Home: React.FC = () => {
               <span className="name">{character.name}</span>
               <div className="series">
                 {character.series.available > 0 ? (
-                  <strong>{character.series.available}</strong>
+                  <strong>{character.series.available} </strong>
                 ) : (
                   ''
                 )}
                 {series}
               </div>
-              {character.description && (
-                <p className="desc">{character.description}</p>
-              )}
             </div>
           </Link>
         </S.CharacterItem>

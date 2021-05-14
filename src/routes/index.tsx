@@ -1,11 +1,15 @@
-import { Route, Switch } from 'react-router-dom'
+import { Redirect, Route, Switch } from 'react-router-dom'
 
 import Home from 'pages/Home'
+import Character from 'pages/Character'
 
 const Routes: React.FC = () => {
   return (
     <Switch>
       <Route path="/" exact component={Home} />
+      <Route path="/character/:id" exact component={Character} />
+
+      <Route path="*" component={() => <Redirect to="/" />} />
     </Switch>
   )
 }

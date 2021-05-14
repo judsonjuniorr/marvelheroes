@@ -295,12 +295,6 @@ export const CharacterItem = styled.li<ICharacterItemProps>`
     transition: all 0.2s;
     z-index: 1;
 
-    .desc {
-      font-size: 0px;
-      transition: all 0.3s;
-      margin-top: 5px;
-    }
-
     .name {
       z-index: 2;
       color: #b3bdd3;
@@ -339,25 +333,16 @@ export const CharacterItem = styled.li<ICharacterItemProps>`
       left: 0;
       top: 100%;
       right: 0;
-      height: 50%;
       pointer-events: none;
       border-left-color: transparent;
       backface-visibility: hidden;
       transform: translateZ(0);
       backdrop-filter: blur(0);
+      min-height: fit-content;
 
       .name,
       .series {
         color: #fff;
-      }
-
-      .desc {
-        font-size: 14px !important;
-        -webkit-line-clamp: 3;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        color: #737987;
       }
     }
   }

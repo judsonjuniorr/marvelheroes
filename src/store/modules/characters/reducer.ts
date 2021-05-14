@@ -7,7 +7,7 @@ const INITIAL_STATE: ICharactersState = {
   characters: [],
   page: 1,
   maxPages: 1,
-  perPage: 30,
+  perPage: 28,
   total: 0,
   loading: true,
   loadError: false
@@ -21,12 +21,13 @@ const characters: Reducer<ICharactersState> = (
     const { payload, type } = action
     switch (type) {
       case ActionTypes.loadAllCharactersRequest: {
-        Object.assign(draft, { page: payload.page ?? 1 })
+        Object.assign(draft, { loading: true })
         return draft
       }
 
       case ActionTypes.loadAllCharactersSuccess: {
         Object.assign(draft, {
+          page: payload.page,
           characters: payload.characters,
           maxPages: Math.ceil(payload.total / draft.perPage),
           total: payload.total ?? 0,

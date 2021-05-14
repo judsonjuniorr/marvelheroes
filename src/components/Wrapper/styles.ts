@@ -8,10 +8,10 @@ export const Container = styled.div`
 
   ${breakpoints.smOnly} {
     max-width: 540px;
-    margin: 0 2%;
   }
   ${breakpoints.mdOnly} {
     max-width: 720px;
+    margin: 0 2%;
   }
   ${breakpoints.lg} {
     max-width: 960px;

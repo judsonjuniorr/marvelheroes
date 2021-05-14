@@ -7,8 +7,8 @@ import { ActionTypes, ICharacter } from './types'
 import {
   loadAllCharactersFailure,
   loadAllCharactersRequest,
-  loadAllCharactersSuccess,
-  ILoadCharactersSuccess
+  loadAllCharactersSuccess
+  // ILoadCharactersSuccess
 } from './actions/loadAllCharacters'
 
 type LoadAllCharactersRequest = ReturnType<typeof loadAllCharactersRequest>
@@ -24,30 +24,30 @@ interface ILoadCharactersResponse {
 function* loadAllCharacters({ payload }: LoadAllCharactersRequest) {
   const { page } = payload
   const perPage: number = yield select(state => state.characters.perPage)
-  const limit = page * perPage
   const offset = (page - 1) * perPage
 
   const apiCall = () => {
     return api
-      .get(`/characters`, { params: { limit, offset } })
+      .get(`/characters`, { params: { limit: perPage, offset } })
       .then(r => r.data)
       .catch(e => {
         throw e
       })
   }
 
-  const cached = sessionStorage.getItem(`@marvelheroes/characters:page:${page}`)
-  if (cached) {
-    const cachedResult = JSON.parse(cached) as ILoadCharactersSuccess
-    yield put(loadAllCharactersSuccess(cachedResult))
-    return
-  }
+  // const cached = sessionStorage.getItem(`@marvelheroes/characters:page:${page}`)
+  // if (cached) {
+  //   const cachedResult = JSON.parse(cached) as ILoadCharactersSuccess
+  //   yield put(loadAllCharactersSuccess(cachedResult))
+  //   return
+  // }
 
   try {
     const charactersRequest: AxiosResponse<ILoadCharactersResponse> =
       yield call(apiCall)
 
     const charactersResult = {
+      page,
       total: charactersRequest.data.total,
       characters: charactersRequest.data.results.map(r => ({
         id: r.id,

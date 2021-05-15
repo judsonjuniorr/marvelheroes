@@ -3,7 +3,7 @@ import { AxiosResponse } from 'axios'
 
 import api from 'helpers/api'
 
-import { ActionTypes, ICharacter } from './types'
+import { ActionTypes, ICharacter, IUpdates } from './types'
 import {
   loadAllCharactersFailure,
   loadAllCharactersRequest,
@@ -37,8 +37,9 @@ function* loadAllCharacters({ payload }: LoadAllCharactersRequest) {
   const { page } = payload
   const perPage: number = yield select(state => state.characters.perPage)
   const offset = (page - 1) * perPage
+  const updates: IUpdates[] = yield select(state => state.characters.updates)
 
-  const apiCall = () => {
+  const apiCall = async () => {
     return api
       .get(`/characters`, { params: { limit: perPage, offset } })
       .then(r => r.data)
@@ -50,6 +51,11 @@ function* loadAllCharacters({ payload }: LoadAllCharactersRequest) {
   const cached = sessionStorage.getItem(`@marvelheroes/characters:page:${page}`)
   if (cached) {
     const cachedResult = JSON.parse(cached) as ILoadCharactersSuccess
+    const updatedChars = cachedResult.characters.map(char => {
+      const updated = updates.find(c => Number(c.id) === Number(char.id)) || {}
+      return { ...char, ...updated }
+    })
+    Object.assign(cachedResult, { characters: updatedChars })
     yield put(loadAllCharactersSuccess(cachedResult))
     return
   }
@@ -61,13 +67,18 @@ function* loadAllCharacters({ payload }: LoadAllCharactersRequest) {
     const charactersResult = {
       page,
       total: charactersRequest.data.total,
-      characters: charactersRequest.data.results.map(r => ({
-        id: r.id,
-        name: r.name,
-        description: r.description,
-        thumbnail: r.thumbnail,
-        series: r.series
-      }))
+      characters: charactersRequest.data.results.map(r => {
+        const updated = updates.find(c => Number(c.id) === Number(r.id)) || {}
+
+        return {
+          id: r.id,
+          name: r.name,
+          description: r.description,
+          thumbnail: r.thumbnail,
+          series: r.series,
+          ...updated
+        }
+      })
     }
 
     sessionStorage.setItem(
@@ -83,8 +94,9 @@ function* loadAllCharacters({ payload }: LoadAllCharactersRequest) {
 
 function* searchCharacters({ payload }: SearchCharactersRequest) {
   const { query } = payload
+  const updates: IUpdates[] = yield select(state => state.characters.updates)
 
-  const apiCall = () => {
+  const apiCall = async () => {
     return api
       .get(`/characters`, { params: { nameStartsWith: query } })
       .then(r => r.data)
@@ -98,6 +110,12 @@ function* searchCharacters({ payload }: SearchCharactersRequest) {
   )
   if (cached) {
     const cachedResult = JSON.parse(cached) as ILoadCharactersSuccess
+    const updatedChars = cachedResult.characters.map(char => {
+      const updated = updates.find(c => Number(c.id) === Number(char.id)) || {}
+      return { ...char, ...updated }
+    })
+    Object.assign(cachedResult, { characters: updatedChars })
+
     yield put(searchCharactersSuccess(cachedResult))
     return
   }
@@ -108,13 +126,18 @@ function* searchCharacters({ payload }: SearchCharactersRequest) {
 
     const charactersResult = {
       total: charactersRequest.data.total,
-      characters: charactersRequest.data.results.map(r => ({
-        id: r.id,
-        name: r.name,
-        description: r.description,
-        thumbnail: r.thumbnail,
-        series: r.series
-      }))
+      characters: charactersRequest.data.results.map(r => {
+        const updated = updates.find(c => Number(c.id) === Number(r.id)) || {}
+
+        return {
+          id: r.id,
+          name: r.name,
+          description: r.description,
+          thumbnail: r.thumbnail,
+          series: r.series,
+          ...updated
+        }
+      })
     }
 
     sessionStorage.setItem(
@@ -130,8 +153,9 @@ function* searchCharacters({ payload }: SearchCharactersRequest) {
 
 function* serieCharacters({ payload }: SerieCharactersRequest) {
   const { serieID } = payload
+  const updates: IUpdates[] = yield select(state => state.characters.updates)
 
-  const apiCall = () => {
+  const apiCall = async () => {
     return api
       .get(`/series/${serieID}/characters`, { params: { limit: 100 } })
       .then(r => r.data)
@@ -145,13 +169,19 @@ function* serieCharacters({ payload }: SerieCharactersRequest) {
       yield call(apiCall)
 
     const charactersResult: ICharacter[] = charactersRequest.data.results.map(
-      r => ({
-        id: r.id,
-        name: r.name,
-        description: r.description,
-        thumbnail: r.thumbnail,
-        series: r.series
-      })
+      r => {
+        const updated =
+          updates.find(char => Number(char.id) === Number(r.id)) || {}
+
+        return {
+          id: r.id,
+          name: r.name,
+          description: r.description,
+          thumbnail: r.thumbnail,
+          series: r.series,
+          ...updated
+        }
+      }
     )
 
     yield put(serieCharactersSuccess(charactersResult))

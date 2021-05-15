@@ -1,29 +1,30 @@
-import { FiAlertCircle } from 'react-icons/fi'
-import { useField } from '@unform/core'
 import {
-  InputHTMLAttributes,
-  useCallback,
   useEffect,
   useRef,
-  useState
+  useState,
+  useCallback,
+  TextareaHTMLAttributes
 } from 'react'
+import TextareaAutosize from 'react-textarea-autosize'
+import { FiAlertCircle } from 'react-icons/fi'
 
-import * as S from './styles'
+import { useField } from '@unform/core'
 
-export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+import { Container, Error } from './styles'
+
+export interface TextAreaProps
+  extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   name: string
   containerStyle?: React.CSSProperties
-  alwaysFocus?: boolean
 }
 
-const InputComponent: React.FC<InputProps> = ({
+const TextAreaComponent: React.FC<TextAreaProps> = ({
   name,
   containerStyle = {},
-  readOnly,
-  alwaysFocus = false,
-  ...rest
+  placeholder,
+  readOnly
 }) => {
-  const inputRef = useRef<HTMLInputElement>(null)
+  const inputRef = useRef<HTMLTextAreaElement>(null)
   const [isFocused, setIsFocused] = useState(false)
   const [isFilled, setisFilled] = useState(false)
   const { fieldName, defaultValue, error, registerField } = useField(name)
@@ -54,33 +55,32 @@ const InputComponent: React.FC<InputProps> = ({
   }, [fieldName, registerField])
 
   return (
-    <S.Container
+    <Container
       style={containerStyle}
       isErrored={!!error}
       isFilled={isFilled}
-      isFocused={isFocused || alwaysFocus}
+      isFocused={isFocused}
+      data-testid="input-container"
       isReadOnly={!!readOnly}
+      className="textarea-container"
     >
-      <S.InputContainer>
-        <input
-          onFocus={handleInputFocus}
-          onBlur={handleInputBlur}
-          defaultValue={defaultValue}
-          ref={inputRef}
-          readOnly={readOnly}
-          disabled={readOnly}
-          {...rest}
-        />
-      </S.InputContainer>
+      <TextareaAutosize
+        onFocus={handleInputFocus}
+        onBlur={handleInputBlur}
+        defaultValue={defaultValue}
+        ref={inputRef}
+        readOnly={readOnly}
+        placeholder={placeholder}
+        rows={7}
+      />
 
       {error && (
-        <S.Error>
+        <Error>
           <FiAlertCircle size={16} />
           {error}
-        </S.Error>
+        </Error>
       )}
-    </S.Container>
+    </Container>
   )
 }
-
-export default InputComponent
+export default TextAreaComponent

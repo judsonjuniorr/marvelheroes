@@ -8,6 +8,7 @@ export enum ActionTypes {
   serieCharactersRequest = '@characters/SERIE_CHARACTERS_REQUEST',
   serieCharactersSuccess = '@characters/SERIE_CHARACTERS_SUCCESS',
   serieCharactersFailure = '@characters/SERIE_CHARACTERS_FAILURE',
+  updateCharacter = '@characters/UPDATE_CHARACTER',
   searchCharactersClear = '@characters/SEARCH_CLEAR'
 }
 
@@ -30,6 +31,12 @@ export interface ICharacter {
   series: ISeries
 }
 
+export interface IUpdates {
+  id: string | number
+  name: string
+  description: string
+}
+
 export interface ICharactersState {
   characters: ICharacter[]
   serieCharacters: ICharacter[]
@@ -42,4 +49,5 @@ export interface ICharactersState {
   searchQuery: string
   searchResult: ICharacter[]
   searchError: boolean
+  updates: IUpdates[]
 }

@@ -1,13 +1,19 @@
-import { useEffect, useMemo, useState } from 'react'
-import { useLocation, useParams } from 'react-router'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { useLocation, useParams } from 'react-router'
+import { FaPencilAlt } from 'react-icons/fa'
 import Lottie from 'react-lottie-player'
 import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import { Form } from '@unform/web'
 
 import api from 'helpers/api'
 import { IState } from 'store'
 import useDocumentTitle from 'helpers/useDocumentTitle'
+import { ISeriesState } from 'store/modules/series/types'
+import { ICharactersState } from 'store/modules/characters/types'
+import { listSeriesRequest } from 'store/modules/series/actions/listSeries'
+import { updateCharacter } from 'store/modules/characters/actions/updateCharacters'
 
 import loadingAnimation from 'assets/loading.json'
 import logo from 'assets/logo-inline.svg'
@@ -15,19 +21,27 @@ import logo from 'assets/logo-inline.svg'
 import Search from 'components/Search'
 import SeriesList from 'components/SeriesList'
 
-import { ISeriesState } from 'store/modules/series/types'
-import { listSeriesRequest } from 'store/modules/series/actions/listSeries'
+import InputComponent from 'components/Input'
+import TextAreaComponent from 'components/Textarea'
+
 import * as S from './styles'
 import * as T from './types'
 
 const Character: React.FC = () => {
+  const dispatch = useDispatch()
   const { id } = useParams<T.IParams>()
+  const [editMode, setEditMode] = useState(false)
   const { state, search } = useLocation<T.ILocation>()
   const [character, setCharacter] = useState<T.ICharacter | null>(null)
   const { perPage } = useSelector<IState, ISeriesState>(st => st.series)
-  const dispatch = useDispatch()
+  const { updates } = useSelector<IState, ICharactersState>(st => st.characters)
 
   useDocumentTitle(character?.name || state?.name)
+
+  const charUpdated = useMemo(
+    () => updates.find(char => Number(char.id) === Number(id)) || {},
+    [id, updates]
+  )
 
   useEffect(() => {
     api
@@ -38,14 +52,14 @@ const Character: React.FC = () => {
             toast.error('Personagem não encontrado', { toastId: 'notFound' })
           return
         }
-        setCharacter(data.data.results[0])
+        setCharacter({ ...data.data.results[0], ...charUpdated })
         dispatch(listSeriesRequest({ characterID: id, page: 1 }))
       })
       .catch(() => {
         if (!toast.isActive('error'))
           toast.error('Falha ao carregar o personagem', { toastId: 'error' })
       })
-  }, [dispatch, id])
+  }, [charUpdated, dispatch, id])
 
   const page = useMemo(() => {
     const pageSearch = new URLSearchParams(search).get('page')
@@ -74,6 +88,15 @@ const Character: React.FC = () => {
     )
   }, [character])
 
+  const handleSubmit = useCallback(
+    formData => {
+      setCharacter(char => (char ? { ...char, ...formData } : formData))
+      setEditMode(false)
+      dispatch(updateCharacter({ id, ...formData }))
+    },
+    [dispatch, id]
+  )
+
   return (
     <>
       <S.Header>
@@ -98,20 +121,69 @@ const Character: React.FC = () => {
         </S.Loading>
       ) : (
         <S.Content>
-          <S.CharacterInfo>
-            <img
-              src={`${character.thumbnail.path}/portrait_fantastic.${character.thumbnail.extension}`}
-              alt=""
-              className="thumbnail"
-            />
-            <div className="info">
-              <h1>{character.name}</h1>
-              {seriesCountDesc}
-              {character.description && (
-                <p className="description">{character.description}</p>
-              )}
-            </div>
-          </S.CharacterInfo>
+          <Form
+            onSubmit={handleSubmit}
+            initialData={{
+              name: character.name,
+              description: character.description
+            }}
+          >
+            <S.CharacterInfo>
+              <div className="thumbnail">
+                <img
+                  src={`${character.thumbnail.path}/portrait_fantastic.${character.thumbnail.extension}`}
+                  alt=""
+                />
+              </div>
+              <div className="info">
+                {!editMode && (
+                  <button
+                    type="button"
+                    className="editBtn"
+                    onClick={() => setEditMode(true)}
+                  >
+                    Editar <FaPencilAlt />
+                  </button>
+                )}
+
+                {editMode ? (
+                  <div className="nameInpt">
+                    <InputComponent
+                      name="name"
+                      placeholder="Nome do personagem"
+                    />
+                  </div>
+                ) : (
+                  <h1>{character.name}</h1>
+                )}
+
+                {seriesCountDesc}
+                {character.description && !editMode && (
+                  <p className="description">{character.description}</p>
+                )}
+                {editMode && (
+                  <TextAreaComponent
+                    name="description"
+                    placeholder="Descrição"
+                  />
+                )}
+                {editMode && (
+                  <div className="editAction">
+                    <button
+                      className="cancel"
+                      type="button"
+                      onClick={() => setEditMode(false)}
+                    >
+                      Cancelar
+                    </button>
+                    <button className="submit" type="submit">
+                      Atualizar
+                    </button>
+                  </div>
+                )}
+              </div>
+            </S.CharacterInfo>
+          </Form>
 
           {character.series.available > 0 && (
             <S.Series>

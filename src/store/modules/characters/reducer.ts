@@ -14,7 +14,8 @@ const INITIAL_STATE: ICharactersState = {
   searchQuery: '',
   searchResult: [],
   searchError: false,
-  serieCharacters: []
+  serieCharacters: [],
+  updates: []
 }
 
 const characters: Reducer<ICharactersState> = (
@@ -24,6 +25,15 @@ const characters: Reducer<ICharactersState> = (
   return produce(state, draft => {
     const { payload, type } = action
     switch (type) {
+      case ActionTypes.updateCharacter: {
+        const updatesFiltered = draft.updates.filter(
+          char => char.id !== payload.id
+        )
+        updatesFiltered.push(payload)
+
+        return { ...draft, updates: updatesFiltered }
+      }
+
       case ActionTypes.serieCharactersRequest: {
         Object.assign(draft, {
           maxPages: 1,

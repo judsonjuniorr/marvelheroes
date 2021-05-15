@@ -61,6 +61,8 @@ export const CharacterInfo = styled.section`
   display: flex;
   margin-top: 20px;
   padding-top: 20px;
+  position: relative;
+  width: 100%;
 
   .thumbnail {
     padding: 20px;
@@ -68,13 +70,33 @@ export const CharacterInfo = styled.section`
   }
 
   .info {
+    position: relative;
     margin-top: 40px;
+    width: 100%;
+    padding-bottom: 30px;
 
-    h1 {
-      font-family: 'Roboto Condensed', sans-serif;
-      text-transform: uppercase;
-      color: #fff;
-      font-size: 32px;
+    .editBtn {
+      position: absolute;
+      left: 0;
+      top: -30px;
+
+      background: transparent;
+      border: medium none;
+      color: #737987;
+      display: flex;
+      align-items: center;
+      transition: all 0.4s ease;
+      border-radius: 4px;
+      padding: 4px 5px;
+
+      svg {
+        margin-left: 7px;
+      }
+
+      &:hover {
+        background: #737987;
+        color: #fff;
+      }
     }
 
     .series {
@@ -94,6 +116,79 @@ export const CharacterInfo = styled.section`
       font-weight: 500;
       line-height: 20px;
       max-width: 50vw;
+    }
+  }
+
+  .info h1 {
+    color: #fff;
+    font-size: 32px;
+    font-family: 'Roboto Condensed', sans-serif;
+    text-transform: uppercase;
+  }
+
+  .nameInpt > label > div {
+    background: transparent;
+    border: medium none;
+    border: 2px dashed #737987;
+    height: 40px;
+
+    input {
+      color: #fff;
+      font-family: 'Roboto Condensed', sans-serif;
+      text-transform: uppercase;
+    }
+  }
+
+  .textarea-container {
+    border: 2px dashed #737987;
+    min-height: 145px;
+    display: flex;
+    align-items: flex-start;
+
+    textarea {
+      min-height: 100%;
+      color: #fff;
+      font-family: 'Roboto', sans-serif;
+    }
+  }
+
+  .editAction {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+
+    button {
+      background: transparent;
+      border: medium none;
+      border-radius: 4px;
+      transition: all 0.4s;
+      font-weight: 600;
+      padding: 4px 5px;
+      text-transform: uppercase;
+
+      + button {
+        margin-left: 7px;
+      }
+    }
+
+    .cancel {
+      color: rgb(243, 20, 49);
+
+      &:hover {
+        color: #fff;
+        background: rgb(243, 20, 49);
+      }
+    }
+
+    .submit {
+      color: #2dce89;
+
+      &:hover {
+        color: #fff;
+        background: #2dce89;
+      }
     }
   }
 `

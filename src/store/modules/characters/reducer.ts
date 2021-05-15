@@ -27,14 +27,18 @@ const characters: Reducer<ICharactersState> = (
         Object.assign(draft, {
           searchQuery: payload.query,
           searchResult: [],
-          searchError: false
+          searchError: false,
+          loading: true
         })
 
         return draft
       }
 
       case ActionTypes.searchCharactersSuccess: {
-        Object.assign(draft, { searchResult: payload.characters })
+        Object.assign(draft, {
+          searchResult: payload.characters,
+          loading: false
+        })
 
         return draft
       }
@@ -68,7 +72,7 @@ const characters: Reducer<ICharactersState> = (
       }
 
       case ActionTypes.searchCharactersFailure: {
-        Object.assign(draft, { searchError: true })
+        Object.assign(draft, { searchError: true, loading: false })
 
         return draft
       }

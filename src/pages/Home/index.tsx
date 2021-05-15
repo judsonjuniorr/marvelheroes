@@ -1,15 +1,7 @@
-import {
-  FaAngleRight,
-  FaAngleDoubleRight,
-  FaAngleLeft,
-  FaAngleDoubleLeft
-} from 'react-icons/fa'
-import { ImSpinner9 } from 'react-icons/im'
-import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link, useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import LazyLoad from 'react-lazyload'
+import { useEffect } from 'react'
 
 import useDocumentTitle from 'helpers/useDocumentTitle'
 
@@ -17,7 +9,9 @@ import { IState } from 'store'
 import { ICharactersState } from 'store/modules/characters/types'
 import { loadAllCharactersRequest } from 'store/modules/characters/actions/loadAllCharacters'
 
+import Search from 'components/Search'
 import Wrapper from 'components/Wrapper'
+import CharacterList from 'components/CharacterList'
 
 import wave from 'assets/wave.svg'
 import logo from 'assets/logo.svg'
@@ -27,16 +21,14 @@ import spiderMan from 'assets/spider-man.png'
 import greenLantern from 'assets/green-lantern.png'
 import captainWonderWoman from 'assets/captain-and-wonder-woman.png'
 
-import Search from 'components/Search'
 import * as S from './styles'
 
 const Home: React.FC = () => {
-  const contentRef = useRef<HTMLDivElement>(null)
   const dispatch = useDispatch()
   const history = useHistory()
   useDocumentTitle()
 
-  const { loadError, total, characters, page, maxPages, loading } = useSelector<
+  const { loadError, total, page, maxPages } = useSelector<
     IState,
     ICharactersState
   >(state => state.characters)
@@ -59,122 +51,6 @@ const Home: React.FC = () => {
       })
   }, [loadError])
 
-  const characterList = useMemo(() => {
-    return characters.map(character => {
-      let series = ``
-      if (character.series.available > 0) series = 'séries'
-      if (character.series.available === 1) series = 'série'
-
-      return (
-        <S.CharacterItem key={character.id}>
-          <Link
-            to={{
-              pathname: `/character/${character.id}`,
-              state: { name: character.name }
-            }}
-          >
-            <LazyLoad offset={50}>
-              <img
-                src={`${character.thumbnail.path}/portrait_xlarge.${character.thumbnail.extension}`}
-                alt=""
-                className="thumbnail"
-              />
-            </LazyLoad>
-            <div className="description">
-              <span className="name">{character.name}</span>
-              <div className="series">
-                {character.series.available > 0 ? (
-                  <strong>{character.series.available} </strong>
-                ) : (
-                  ''
-                )}
-                {series}
-              </div>
-            </div>
-          </Link>
-        </S.CharacterItem>
-      )
-    })
-  }, [characters])
-
-  const skeletonList = useMemo(() => {
-    return [...Array(28).keys()].map(key => {
-      return (
-        <S.CharacterItem key={key}>
-          <div className="thumbnail skeleton-load" />
-          <div className="description">
-            <span className="name skeleton-load" />
-            <div className="series skeleton-load" />
-          </div>
-        </S.CharacterItem>
-      )
-    })
-  }, [])
-
-  const handlePrevPage = useCallback(() => {
-    if (loading) return
-    history.replace(`/?page=${page - 1}`)
-    dispatch(loadAllCharactersRequest(page - 1))
-    contentRef.current?.scrollIntoView()
-  }, [dispatch, history, loading, page])
-
-  const prevPage = useMemo(
-    () =>
-      page > 1 && (
-        <S.CharacterItem className="pageAction">
-          <button type="button" onClick={handlePrevPage}>
-            <span>Página anterior</span>
-            <div className="iconWrapper">
-              {loading ? (
-                <ImSpinner9 className="loading" size={22} />
-              ) : (
-                <>
-                  <FaAngleDoubleLeft className="icon hover" size={19} />
-                  <FaAngleLeft className="icon" size={19} />
-                </>
-              )}
-            </div>
-            <span className="pages">
-              {page}/{maxPages}
-            </span>
-          </button>
-        </S.CharacterItem>
-      ),
-    [handlePrevPage, loading, maxPages, page]
-  )
-
-  const handleNextPage = useCallback(() => {
-    if (loading) return
-    history.replace(`/?page=${page + 1}`)
-    dispatch(loadAllCharactersRequest(page + 1))
-    contentRef.current?.scrollIntoView()
-  }, [dispatch, history, loading, page])
-
-  const nextPage = useMemo(
-    () =>
-      maxPages > page && (
-        <S.CharacterItem className="pageAction">
-          <button type="button" onClick={handleNextPage}>
-            <span>Prox. Página</span>
-            <div className="iconWrapper">
-              {loading ? (
-                <ImSpinner9 className="loading" size={22} />
-              ) : (
-                <>
-                  <FaAngleRight className="icon" size={19} />
-                  <FaAngleDoubleRight className="icon hover" size={19} />
-                </>
-              )}
-            </div>
-            <span className="pages">
-              {page}/{maxPages}
-            </span>
-          </button>
-        </S.CharacterItem>
-      ),
-    [handleNextPage, loading, maxPages, page]
-  )
-
   return (
     <S.Wrapper>
       <S.Main>
@@ -194,7 +70,7 @@ const Home: React.FC = () => {
         <img src={spiderMan} alt="" className="character spiderman" />
         <img src={wave} alt="" className="wave" />
       </S.Main>
-      <S.Content ref={contentRef}>
+      <S.Content>
         <Wrapper>
           <S.Section>
             <Search />
@@ -206,9 +82,7 @@ const Home: React.FC = () => {
             </small>
 
             <ul>
-              {prevPage}
-              {loading ? skeletonList : characterList}
-              {nextPage}
+              <CharacterList />
             </ul>
           </S.Section>
         </Wrapper>

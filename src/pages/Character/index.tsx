@@ -1,130 +1,62 @@
-import { useLocation, useParams } from 'react-router'
 import { useEffect, useMemo, useState } from 'react'
+import { useLocation, useParams } from 'react-router'
+import { useDispatch, useSelector } from 'react-redux'
 import Lottie from 'react-lottie-player'
 import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
 
 import api from 'helpers/api'
+import { IState } from 'store'
 import useDocumentTitle from 'helpers/useDocumentTitle'
 
 import loadingAnimation from 'assets/loading.json'
 import logo from 'assets/logo-inline.svg'
 
-import LazyLoad from 'react-lazyload'
 import Search from 'components/Search'
+import SeriesList from 'components/SeriesList'
+
+import { ISeriesState } from 'store/modules/series/types'
+import { listSeriesRequest } from 'store/modules/series/actions/listSeries'
 import * as S from './styles'
-
-interface IParams {
-  id: string
-}
-
-interface ILocation {
-  name?: string
-}
-
-interface ISeriesInfo {
-  id: number
-  title: string
-  description: string
-  detailsURL?: string
-  startYear: number
-  endYear: number
-  rating: string
-  thumbnail: {
-    path: string
-    extension: string
-  }
-}
-
-interface ICharacter {
-  id: number
-  name: string
-  description: string
-  thumbnail: {
-    path: string
-    extension: string
-  }
-  series: {
-    available: number
-    collectionURI: string
-    items: {
-      resourceURI: string
-      name: string
-    }[]
-  }
-}
-
-interface ICharacterRequest {
-  data: {
-    count: number
-    results: ICharacter[]
-  }
-}
+import * as T from './types'
 
 const Character: React.FC = () => {
-  const { id } = useParams<IParams>()
-  const { state } = useLocation<ILocation>()
-  const [character, setCharacter] = useState<ICharacter | null>(null)
-  const [series, setSeries] = useState<ISeriesInfo[] | null>(null)
+  const { id } = useParams<T.IParams>()
+  const { state, search } = useLocation<T.ILocation>()
+  const [character, setCharacter] = useState<T.ICharacter | null>(null)
+  const { perPage } = useSelector<IState, ISeriesState>(st => st.series)
+  const dispatch = useDispatch()
+
   useDocumentTitle(character?.name || state?.name)
 
   useEffect(() => {
-    async function loadSeries(charReq: ICharacter) {
-      const serieIDs = charReq.series.items.map(
-        serie => serie.resourceURI.split('/').slice(-1)[0]
-      )
-      const serieInfoList: ISeriesInfo[] = []
-      await Promise.all(
-        serieIDs.map(async serie => {
-          const cached = sessionStorage.getItem(`@marvelheroes/serie:${serie}`)
-          if (cached) {
-            serieInfoList.push(JSON.parse(cached) as ISeriesInfo)
-          } else {
-            const response = await api.get(`/series/${serie}`)
-            const serieInfo = response.data.data.results
-            if (serieInfo?.length > 0) {
-              const serieData = {
-                id: serieInfo[0].id,
-                title: serieInfo[0].title.split(' (')[0],
-                description: serieInfo[0].description,
-                detailsURL:
-                  serieInfo[0].urls.length > 0
-                    ? serieInfo[0].urls[0].url
-                    : undefined,
-                startYear: serieInfo[0].startYear,
-                endYear: serieInfo[0].endYear,
-                rating: serieInfo[0].rating,
-                thumbnail: serieInfo[0].thumbnail
-              }
-              serieInfoList.push(serieData)
-              sessionStorage.setItem(
-                `@marvelheroes/serie:${serie}`,
-                JSON.stringify(serieData)
-              )
-            }
-          }
-        })
-      )
-
-      setSeries(serieInfoList)
-    }
-
     api
-      .get<ICharacterRequest>(`/characters/${id}`)
+      .get<T.ICharacterRequest>(`/characters/${id}`)
       .then(({ data }) => {
         if (data.data.count <= 0) {
           if (!toast.isActive('notFound'))
             toast.error('Personagem não encontrado', { toastId: 'notFound' })
           return
         }
+        console.log(data.data.results[0])
         setCharacter(data.data.results[0])
-        loadSeries(data.data.results[0])
+        dispatch(listSeriesRequest({ characterID: id, page: 1 }))
       })
       .catch(() => {
         if (!toast.isActive('error'))
           toast.error('Falha ao carregar o personagem', { toastId: 'error' })
       })
-  }, [id])
+  }, [dispatch, id])
+
+  const page = useMemo(() => {
+    const pageSearch = new URLSearchParams(search).get('page')
+    if (!pageSearch) return 1
+    return Number(pageSearch.replace(/\D+/g, ''))
+  }, [search])
+
+  useEffect(() => {
+    if (page) dispatch(listSeriesRequest({ characterID: id, page }))
+  }, [dispatch, id, page])
 
   const seriesCountDesc = useMemo(() => {
     if (!character) return <></>
@@ -143,38 +75,6 @@ const Character: React.FC = () => {
     )
   }, [character])
 
-  const seriesList = useMemo(() => {
-    if (!series) return <></>
-
-    return series
-      .sort((a, b) => b.endYear - a.endYear)
-      .map(serie => (
-        <S.SerieInfo key={serie.id}>
-          <Link to={`/serie/${serie.id}`}>
-            <div className="cover">
-              <LazyLoad>
-                <img
-                  src={`${serie.thumbnail.path}/landscape_incredible.${serie.thumbnail.extension}`}
-                  alt=""
-                />
-              </LazyLoad>
-              <strong>{serie.title}</strong>
-            </div>
-          </Link>
-          <div className="moreInfo">
-            <span className="year">
-              {serie.startYear === serie?.endYear
-                ? serie.startYear
-                : `${serie.startYear} - ${serie?.endYear || '.'}`}
-            </span>
-            <Link to={`/serie/${serie.id}`} className="details">
-              Ver mais...
-            </Link>
-          </div>
-        </S.SerieInfo>
-      ))
-  }, [series])
-
   return (
     <>
       <S.Header>
@@ -185,7 +85,7 @@ const Character: React.FC = () => {
       </S.Header>
       {!character ? (
         <S.Loading>
-          {state.name && (
+          {state?.name && (
             <span>
               Aguarde enquanto <strong>{state.name}</strong> se prepara para a
               batalha
@@ -217,7 +117,11 @@ const Character: React.FC = () => {
           {character.series.available > 0 && (
             <S.Series>
               <h1>SERIES</h1>
-              <ul>{seriesList}</ul>
+              <small>
+                Exibindo {page * perPage - perPage + 1} - {page * perPage} de{' '}
+                {character.series.available}
+              </small>
+              <SeriesList />
             </S.Series>
           )}
         </S.Content>

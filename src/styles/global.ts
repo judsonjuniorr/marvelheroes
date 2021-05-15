@@ -46,7 +46,7 @@ export default createGlobalStyle`
   .skeleton-load {
     position: relative;
     overflow: hidden;
-    background-color: #777;
+    background-color: #222;
 
     &:before {
       content: '';
@@ -56,7 +56,7 @@ export default createGlobalStyle`
       top: 0;
       height: 100%;
       width: 150px;
-      background: linear-gradient(to right, transparent 0%, #888 50%, transparent 100%);
+      background: linear-gradient(to right, transparent 0%, #444 50%, transparent 100%);
       animation: ${skeletonLoad} 2s infinite;
     }
   }

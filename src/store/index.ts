@@ -6,9 +6,11 @@ import rootReducer from './modules/rootReducer'
 import rootSaga from './modules/rootSaga'
 
 import { ICharactersState } from './modules/characters/types'
+import { ISeriesState } from './modules/series/types'
 
 export interface IState {
   characters: ICharactersState
+  series: ISeriesState
 }
 
 const sagaMiddleware = createSagaMiddleware()

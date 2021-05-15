@@ -71,6 +71,7 @@ export const CharacterInfo = styled.section`
     margin-top: 40px;
 
     h1 {
+      font-family: 'Roboto Condensed', sans-serif;
       text-transform: uppercase;
       color: #fff;
       font-size: 32px;
@@ -101,92 +102,10 @@ export const Series = styled.section`
   margin-top: 50px;
 
   h1 {
+    font-family: 'Roboto Condensed', sans-serif;
     text-transform: uppercase;
     letter-spacing: 4px;
     font-weight: 500;
     color: #fff;
-  }
-
-  ul {
-    list-style: none;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    grid-gap: 30px;
-    margin-top: 20px;
-  }
-`
-
-export const SerieInfo = styled.li`
-  .cover {
-    display: block;
-    position: relative;
-    width: 100%;
-    min-height: 202px;
-    background: #222;
-    border-top-left-radius: 7px;
-    border-top-right-radius: 7px;
-
-    img {
-      width: 100%;
-      object-fit: cover;
-      border-top-left-radius: 7px;
-      border-top-right-radius: 7px;
-      display: block;
-    }
-
-    strong {
-      display: flex;
-      position: absolute;
-      left: 0;
-      bottom: 0;
-      padding: 5px 10px;
-      border-top-right-radius: 5px;
-      background: rgba(0, 0, 0, 0.9);
-      color: #737987;
-      transition: all 0.4s ease;
-      font-weight: 500;
-    }
-  }
-
-  .moreInfo {
-    display: flex;
-    justify-content: space-between;
-    padding: 8px 10px;
-    transition: all 0.4s ease;
-    border-bottom-left-radius: 7px;
-    border-bottom-right-radius: 7px;
-
-    .year {
-      display: block;
-      margin-top: 3px;
-      font-weight: 500;
-      transition: all 0.2s;
-    }
-
-    .details {
-      display: inline-block;
-      text-decoration: none;
-      color: #737987;
-      padding: 3px 7px;
-      border-radius: 3px;
-      transition: all 0.2s;
-
-      &:hover {
-        background: #b3bdd3;
-        color: #000;
-      }
-    }
-  }
-
-  &:hover {
-    .cover strong,
-    .moreInfo {
-      background: #000;
-      color: #fff;
-    }
-    .year,
-    .details {
-      color: #b3bdd3;
-    }
   }
 `

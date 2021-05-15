@@ -1,4 +1,4 @@
-import { all, call, put, select, takeLeading } from 'redux-saga/effects'
+import { all, call, put, select, takeLatest } from 'redux-saga/effects'
 import { AxiosResponse } from 'axios'
 
 import api from 'helpers/api'
@@ -15,9 +15,15 @@ import {
   searchCharactersRequest,
   searchCharactersSuccess
 } from './actions/searchCharacters'
+import {
+  serieCharactersFailure,
+  serieCharactersRequest,
+  serieCharactersSuccess
+} from './actions/serieCharacters'
 
 type LoadAllCharactersRequest = ReturnType<typeof loadAllCharactersRequest>
 type SearchCharactersRequest = ReturnType<typeof searchCharactersRequest>
+type SerieCharactersRequest = ReturnType<typeof serieCharactersRequest>
 
 interface ILoadCharactersResponse {
   offset: number
@@ -122,7 +128,40 @@ function* searchCharacters({ payload }: SearchCharactersRequest) {
   }
 }
 
+function* serieCharacters({ payload }: SerieCharactersRequest) {
+  const { serieID } = payload
+
+  const apiCall = () => {
+    return api
+      .get(`/series/${serieID}/characters`, { params: { limit: 100 } })
+      .then(r => r.data)
+      .catch(e => {
+        throw e
+      })
+  }
+
+  try {
+    const charactersRequest: AxiosResponse<ILoadCharactersResponse> =
+      yield call(apiCall)
+
+    const charactersResult: ICharacter[] = charactersRequest.data.results.map(
+      r => ({
+        id: r.id,
+        name: r.name,
+        description: r.description,
+        thumbnail: r.thumbnail,
+        series: r.series
+      })
+    )
+
+    yield put(serieCharactersSuccess(charactersResult))
+  } catch (error) {
+    yield put(serieCharactersFailure())
+  }
+}
+
 export default all([
-  takeLeading(ActionTypes.loadAllCharactersRequest, loadAllCharacters),
-  takeLeading(ActionTypes.searchCharactersRequest, searchCharacters)
+  takeLatest(ActionTypes.loadAllCharactersRequest, loadAllCharacters),
+  takeLatest(ActionTypes.searchCharactersRequest, searchCharacters),
+  takeLatest(ActionTypes.serieCharactersRequest, serieCharacters)
 ])

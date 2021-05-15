@@ -13,7 +13,8 @@ const INITIAL_STATE: ICharactersState = {
   loadError: false,
   searchQuery: '',
   searchResult: [],
-  searchError: false
+  searchError: false,
+  serieCharacters: []
 }
 
 const characters: Reducer<ICharactersState> = (
@@ -23,6 +24,28 @@ const characters: Reducer<ICharactersState> = (
   return produce(state, draft => {
     const { payload, type } = action
     switch (type) {
+      case ActionTypes.serieCharactersRequest: {
+        Object.assign(draft, { loading: true, loadError: false })
+        return draft
+      }
+      case ActionTypes.serieCharactersSuccess: {
+        Object.assign(draft, {
+          serieCharacters: payload.characters,
+          loading: false,
+          loadError: false
+        })
+        return draft
+      }
+
+      case ActionTypes.serieCharactersFailure: {
+        Object.assign(draft, {
+          serieCharacters: [],
+          loading: false,
+          loadError: true
+        })
+        return draft
+      }
+
       case ActionTypes.searchCharactersRequest: {
         Object.assign(draft, {
           searchQuery: payload.query,

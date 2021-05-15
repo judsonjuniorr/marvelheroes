@@ -5,7 +5,7 @@ import api from 'helpers/api'
 
 import { ActionTypes, ISeriesInfo } from './types'
 import {
-  // IListSeriesSuccess,
+  IListSeriesSuccess,
   listSeriesFailure,
   listSeriesRequest,
   listSeriesSuccess
@@ -40,9 +40,9 @@ function* listSeries({ payload }: ListSeriesRequest) {
   const cacheKey = `@marvelheroes/series:${characterID}:page:${page}`
   const cached = sessionStorage.getItem(cacheKey)
   if (cached) {
-    // const cachedResult = JSON.parse(cached) as IListSeriesSuccess
-    // yield put(listSeriesSuccess(cachedResult))
-    // return
+    const cachedResult = JSON.parse(cached) as IListSeriesSuccess
+    yield put(listSeriesSuccess(cachedResult))
+    return
   }
 
   try {

@@ -57,7 +57,7 @@ export const Content = styled(Wrapper)`
   padding-bottom: 40px;
 `
 
-export const CharacterInfo = styled.section`
+export const SerieInfo = styled.section`
   display: flex;
   margin-top: 20px;
   padding-top: 20px;
@@ -88,6 +88,14 @@ export const CharacterInfo = styled.section`
       }
     }
 
+    .year {
+      display: flex;
+      font-weight: 500;
+      margin: 5px 0;
+      font-family: 'Roboto Condensed', sans-serif;
+      color: #b3bdd3;
+    }
+
     .description {
       display: block;
       font-size: 17px;
@@ -98,7 +106,7 @@ export const CharacterInfo = styled.section`
   }
 `
 
-export const Series = styled.section`
+export const Characters = styled.section`
   margin-top: 50px;
 
   h1 {

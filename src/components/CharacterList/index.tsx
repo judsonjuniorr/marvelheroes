@@ -17,10 +17,8 @@ import { loadAllCharactersRequest } from 'store/modules/characters/actions/loadA
 import * as S from './styles'
 
 const CharacterList: React.FC = () => {
-  const { searchResult, characters, loading, maxPages, page } = useSelector<
-    IState,
-    ICharactersState
-  >(state => state.characters)
+  const { searchResult, characters, loading, maxPages, page, serieCharacters } =
+    useSelector<IState, ICharactersState>(state => state.characters)
   const history = useHistory()
   const { search, pathname } = useLocation()
   const dispatch = useDispatch()
@@ -28,8 +26,12 @@ const CharacterList: React.FC = () => {
   const charactersList = useMemo(() => {
     const isSearch = pathname.includes('search')
     if (isSearch) return searchResult
+
+    const isSerie = pathname.includes('serie')
+    if (isSerie) return serieCharacters
+
     return characters
-  }, [characters, pathname, searchResult])
+  }, [characters, pathname, searchResult, serieCharacters])
 
   const characterList = useMemo(() => {
     return charactersList.map(character => {
@@ -84,8 +86,7 @@ const CharacterList: React.FC = () => {
   }, [])
 
   useEffect(() => {
-    const isSearch = pathname.includes('search')
-    if (!isSearch) {
+    if (pathname === '/') {
       const newPage = new URLSearchParams(search).get('page')
       if (newPage)
         dispatch(loadAllCharactersRequest(Number(newPage.replace(/\D+/g, ''))))
@@ -114,7 +115,7 @@ const CharacterList: React.FC = () => {
               )}
             </div>
             <span className="pages">
-              {page}/{maxPages}
+              Você está na página {page} de {maxPages}
             </span>
           </Link>
         </S.CharacterItem>
@@ -144,7 +145,7 @@ const CharacterList: React.FC = () => {
               )}
             </div>
             <span className="pages">
-              {page}/{maxPages}
+              Você está na página {page} de {maxPages}
             </span>
           </Link>
         </S.CharacterItem>

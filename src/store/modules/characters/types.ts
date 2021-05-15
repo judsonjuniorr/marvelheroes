@@ -5,6 +5,9 @@ export enum ActionTypes {
   searchCharactersRequest = '@characters/SEARCH_CHARACTERS_REQUEST',
   searchCharactersSuccess = '@characters/SEARCH_CHARACTERS_SUCCESS',
   searchCharactersFailure = '@characters/SEARCH_CHARACTERS_FAILURE',
+  serieCharactersRequest = '@characters/SERIE_CHARACTERS_REQUEST',
+  serieCharactersSuccess = '@characters/SERIE_CHARACTERS_SUCCESS',
+  serieCharactersFailure = '@characters/SERIE_CHARACTERS_FAILURE',
   searchCharactersClear = '@characters/SEARCH_CLEAR'
 }
 
@@ -29,6 +32,7 @@ export interface ICharacter {
 
 export interface ICharactersState {
   characters: ICharacter[]
+  serieCharacters: ICharacter[]
   page: number
   maxPages: number
   perPage: number

@@ -1,3 +1,4 @@
+import Footer from 'components/Footer'
 import { Provider } from 'react-redux'
 import { BrowserRouter } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
@@ -11,7 +12,10 @@ import GlobalStyles from 'styles/global'
 const App: React.FC = () => (
   <Provider store={store}>
     <BrowserRouter>
-      <Routes />
+      <div className="contentWrapper">
+        <Routes />
+      </div>
+      <Footer />
       <GlobalStyles />
       <ToastContainer />
     </BrowserRouter>

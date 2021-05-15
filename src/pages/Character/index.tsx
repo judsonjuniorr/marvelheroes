@@ -38,7 +38,6 @@ const Character: React.FC = () => {
             toast.error('Personagem não encontrado', { toastId: 'notFound' })
           return
         }
-        console.log(data.data.results[0])
         setCharacter(data.data.results[0])
         dispatch(listSeriesRequest({ characterID: id, page: 1 }))
       })

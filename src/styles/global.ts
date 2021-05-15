@@ -60,4 +60,8 @@ export default createGlobalStyle`
       animation: ${skeletonLoad} 2s infinite;
     }
   }
+
+  .contentWrapper {
+    flex: 1;
+  }
 `

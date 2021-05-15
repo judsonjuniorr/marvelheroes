@@ -115,7 +115,7 @@ const CharacterList: React.FC = () => {
               )}
             </div>
             <span className="pages">
-              Você está na página {page} de {maxPages}
+              Página {page} de {maxPages}
             </span>
           </Link>
         </S.CharacterItem>
@@ -145,7 +145,7 @@ const CharacterList: React.FC = () => {
               )}
             </div>
             <span className="pages">
-              Você está na página {page} de {maxPages}
+              Página {page} de {maxPages}
             </span>
           </Link>
         </S.CharacterItem>

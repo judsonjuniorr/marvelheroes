@@ -160,5 +160,9 @@ export const CharacterItem = styled.li`
         width: inherit;
       }
     }
+
+    .pages {
+      font-size: 13px;
+    }
   }
 `

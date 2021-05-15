@@ -10,7 +10,10 @@ const INITIAL_STATE: ICharactersState = {
   perPage: 28,
   total: 0,
   loading: true,
-  loadError: false
+  loadError: false,
+  searchQuery: '',
+  searchResult: [],
+  searchError: false
 }
 
 const characters: Reducer<ICharactersState> = (
@@ -20,8 +23,28 @@ const characters: Reducer<ICharactersState> = (
   return produce(state, draft => {
     const { payload, type } = action
     switch (type) {
+      case ActionTypes.searchCharactersRequest: {
+        Object.assign(draft, {
+          searchQuery: payload.query,
+          searchResult: [],
+          searchError: false
+        })
+
+        return draft
+      }
+
+      case ActionTypes.searchCharactersSuccess: {
+        Object.assign(draft, { searchResult: payload.characters })
+
+        return draft
+      }
+
       case ActionTypes.loadAllCharactersRequest: {
-        Object.assign(draft, { loading: true })
+        Object.assign(draft, {
+          loading: true,
+          searchQuery: '',
+          searchResult: []
+        })
         return draft
       }
 
@@ -40,6 +63,12 @@ const characters: Reducer<ICharactersState> = (
 
       case ActionTypes.loadAllCharactersFailure: {
         Object.assign(draft, { loadError: true, loading: false })
+
+        return draft
+      }
+
+      case ActionTypes.searchCharactersFailure: {
+        Object.assign(draft, { searchError: true })
 
         return draft
       }

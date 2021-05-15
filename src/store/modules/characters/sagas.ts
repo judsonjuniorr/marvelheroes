@@ -10,8 +10,14 @@ import {
   loadAllCharactersSuccess,
   ILoadCharactersSuccess
 } from './actions/loadAllCharacters'
+import {
+  searchCharactersFailure,
+  searchCharactersRequest,
+  searchCharactersSuccess
+} from './actions/searchCharacters'
 
 type LoadAllCharactersRequest = ReturnType<typeof loadAllCharactersRequest>
+type SearchCharactersRequest = ReturnType<typeof searchCharactersRequest>
 
 interface ILoadCharactersResponse {
   offset: number
@@ -69,6 +75,54 @@ function* loadAllCharacters({ payload }: LoadAllCharactersRequest) {
   }
 }
 
+function* searchCharacters({ payload }: SearchCharactersRequest) {
+  const { query } = payload
+
+  const apiCall = () => {
+    return api
+      .get(`/characters`, { params: { nameStartsWith: query } })
+      .then(r => r.data)
+      .catch(e => {
+        throw e
+      })
+  }
+
+  const cached = sessionStorage.getItem(
+    `@marvelheroes/characters:search:${query}`
+  )
+  if (cached) {
+    const cachedResult = JSON.parse(cached) as ILoadCharactersSuccess
+    yield put(searchCharactersSuccess(cachedResult))
+    return
+  }
+
+  try {
+    const charactersRequest: AxiosResponse<ILoadCharactersResponse> =
+      yield call(apiCall)
+
+    const charactersResult = {
+      total: charactersRequest.data.total,
+      characters: charactersRequest.data.results.map(r => ({
+        id: r.id,
+        name: r.name,
+        description: r.description,
+        thumbnail: r.thumbnail,
+        series: r.series
+      }))
+    }
+
+    sessionStorage.setItem(
+      `@marvelheroes/characters:search:${query}`,
+      JSON.stringify(charactersResult)
+    )
+
+    yield put(searchCharactersSuccess(charactersResult))
+  } catch (error) {
+    yield put(searchCharactersFailure())
+  }
+}
+
 export default all([
-  takeLeading(ActionTypes.loadAllCharactersRequest, loadAllCharacters)
+  takeLeading(ActionTypes.loadAllCharactersRequest, loadAllCharacters),
+  takeLeading(ActionTypes.searchCharactersRequest, searchCharacters)
 ])

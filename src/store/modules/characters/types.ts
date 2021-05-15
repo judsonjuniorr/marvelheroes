@@ -1,7 +1,11 @@
 export enum ActionTypes {
   loadAllCharactersRequest = '@characters/LOAD_ALL_CHARACTERS_REQUEST',
   loadAllCharactersSuccess = '@characters/LOAD_ALL_CHARACTERS_SUCCESS',
-  loadAllCharactersFailure = '@characters/LOAD_ALL_CHARACTERS_FAILURE'
+  loadAllCharactersFailure = '@characters/LOAD_ALL_CHARACTERS_FAILURE',
+  searchCharactersRequest = '@characters/SEARCH_CHARACTERS_REQUEST',
+  searchCharactersSuccess = '@characters/SEARCH_CHARACTERS_SUCCESS',
+  searchCharactersFailure = '@characters/SEARCH_CHARACTERS_FAILURE',
+  searchCharactersClear = '@characters/SEARCH_CLEAR'
 }
 
 interface ISeries {
@@ -31,4 +35,7 @@ export interface ICharactersState {
   total: number
   loading: boolean
   loadError: boolean
+  searchQuery: string
+  searchResult: ICharacter[]
+  searchError: boolean
 }

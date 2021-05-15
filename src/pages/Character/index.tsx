@@ -8,9 +8,10 @@ import api from 'helpers/api'
 import useDocumentTitle from 'helpers/useDocumentTitle'
 
 import loadingAnimation from 'assets/loading.json'
-import logo from 'assets/logo.svg'
+import logo from 'assets/logo-inline.svg'
 
 import LazyLoad from 'react-lazyload'
+import Search from 'components/Search'
 import * as S from './styles'
 
 interface IParams {
@@ -180,7 +181,7 @@ const Character: React.FC = () => {
         <Link to="/" className="logo">
           <img src={logo} alt="MARVEL HEROES" />
         </Link>
-        <div className="search">search</div>
+        <Search />
       </S.Header>
       {!character ? (
         <S.Loading>

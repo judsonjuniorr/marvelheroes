@@ -23,7 +23,7 @@ export const Header = styled(Wrapper)`
   a {
     display: flex;
     img {
-      height: 50px;
+      height: 40px;
     }
   }
 `
@@ -121,6 +121,10 @@ export const SerieInfo = styled.li`
     display: block;
     position: relative;
     width: 100%;
+    min-height: 202px;
+    background: #222;
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
 
     img {
       width: 100%;

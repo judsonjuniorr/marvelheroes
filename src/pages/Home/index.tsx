@@ -27,6 +27,7 @@ import spiderMan from 'assets/spider-man.png'
 import greenLantern from 'assets/green-lantern.png'
 import captainWonderWoman from 'assets/captain-and-wonder-woman.png'
 
+import Search from 'components/Search'
 import * as S from './styles'
 
 const Home: React.FC = () => {
@@ -195,6 +196,9 @@ const Home: React.FC = () => {
       </S.Main>
       <S.Content ref={contentRef}>
         <Wrapper>
+          <S.Section>
+            <Search />
+          </S.Section>
           <S.Section>
             <strong>TODOS OS PERSONAGENS</strong>
             <small>

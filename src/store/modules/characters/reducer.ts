@@ -25,12 +25,18 @@ const characters: Reducer<ICharactersState> = (
     const { payload, type } = action
     switch (type) {
       case ActionTypes.serieCharactersRequest: {
-        Object.assign(draft, { loading: true, loadError: false })
+        Object.assign(draft, {
+          maxPages: 1,
+          page: 1,
+          loading: true,
+          loadError: false
+        })
         return draft
       }
       case ActionTypes.serieCharactersSuccess: {
         Object.assign(draft, {
           serieCharacters: payload.characters,
+          total: payload.characters.length,
           loading: false,
           loadError: false
         })
@@ -48,6 +54,8 @@ const characters: Reducer<ICharactersState> = (
 
       case ActionTypes.searchCharactersRequest: {
         Object.assign(draft, {
+          maxPages: 1,
+          page: 1,
           searchQuery: payload.query,
           searchResult: [],
           searchError: false,

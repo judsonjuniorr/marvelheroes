@@ -42,6 +42,7 @@ const TextAreaComponent: React.FC<TextAreaProps> = ({
   }, [defaultValue])
 
   useEffect(() => {
+    /* istanbul ignore next */
     registerField({
       name: fieldName,
       ref: inputRef.current,

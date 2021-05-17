@@ -1,6 +1,7 @@
 import { ActionTypes } from '../types'
 
 interface IUpdateData {
+  id: string
   name: string
   description?: string
 }

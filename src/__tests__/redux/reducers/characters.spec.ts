@@ -14,6 +14,7 @@ import {
   serieCharactersRequest,
   serieCharactersSuccess
 } from 'store/modules/characters/actions/serieCharacters'
+import { updateCharacter } from 'store/modules/characters/actions/updateCharacters'
 
 const charactersLoadExample = {
   total: 1,
@@ -134,6 +135,33 @@ describe('Characters Reducer', () => {
         serieCharacters: [],
         loading: false,
         loadError: true
+      })
+    )
+  })
+
+  it('should be able to update the character info', () => {
+    const updated = {
+      id: `1`,
+      name: 'Novo nome',
+      description: 'Descrição do personagem'
+    }
+    expect(characters(INITIAL_STATE, updateCharacter(updated))).toEqual(
+      expect.objectContaining({
+        updates: [updated]
+      })
+    )
+  })
+
+  it('should be able to update the character that is already saved some change', () => {
+    const updated = {
+      id: `1`,
+      name: 'Novo nome',
+      description: 'Descrição do personagem'
+    }
+    const updatedState = characters(INITIAL_STATE, updateCharacter(updated))
+    expect(characters(updatedState, updateCharacter(updated))).toEqual(
+      expect.objectContaining({
+        updates: [updated]
       })
     )
   })

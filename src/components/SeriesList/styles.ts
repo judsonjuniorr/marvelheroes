@@ -84,6 +84,8 @@ export const SerieInfo = styled.li`
 
     img {
       width: 100%;
+      height: 100%;
+      object-position: center;
       object-fit: cover;
       border-top-left-radius: 7px;
       border-top-right-radius: 7px;

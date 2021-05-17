@@ -24,7 +24,17 @@ export const Header = styled(Wrapper)`
   a {
     display: flex;
     img {
-      height: 40px;
+      height: 30px;
+
+      ${Breakpoints.md} {
+        height: 40px;
+      }
+    }
+  }
+
+  ${Breakpoints.smDown} {
+    .input-label {
+      max-width: 150px;
     }
   }
 `
@@ -114,7 +124,11 @@ export const SerieInfo = styled.section`
       font-size: 17px;
       font-weight: 500;
       line-height: 20px;
-      max-width: 50vw;
+      width: 100%;
+
+      ${Breakpoints.md} {
+        max-width: 50vw;
+      }
     }
   }
 `

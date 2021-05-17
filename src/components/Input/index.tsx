@@ -60,6 +60,7 @@ const InputComponent: React.FC<InputProps> = ({
       isFilled={isFilled}
       isFocused={isFocused || alwaysFocus}
       isReadOnly={!!readOnly}
+      className="input-label"
     >
       <S.InputContainer data-testid="input-container">
         <input

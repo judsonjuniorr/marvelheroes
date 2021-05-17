@@ -61,11 +61,12 @@ const TextAreaComponent: React.FC<TextAreaProps> = ({
       isErrored={!!error}
       isFilled={isFilled}
       isFocused={isFocused}
-      data-testid="input-container"
+      data-testid="textarea-container"
       isReadOnly={!!readOnly}
       className="textarea-container"
     >
       <TextareaAutosize
+        data-testid="textarea-component"
         onFocus={handleInputFocus}
         onBlur={handleInputBlur}
         defaultValue={defaultValue}

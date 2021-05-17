@@ -126,16 +126,21 @@ export const CharacterInfo = styled.section`
     text-transform: uppercase;
   }
 
-  .nameInpt > label > div {
-    background: transparent;
-    border: medium none;
-    border: 2px dashed #737987;
-    height: 40px;
+  .nameInpt {
+    > label > div {
+      background: transparent;
+      border: medium none;
+      border: 2px dashed #737987;
+      height: 40px;
 
-    input {
-      color: #fff;
-      font-family: 'Roboto Condensed', sans-serif;
-      text-transform: uppercase;
+      input {
+        color: #fff;
+        font-family: 'Roboto Condensed', sans-serif;
+        text-transform: uppercase;
+      }
+    }
+    + .textarea-container {
+      margin-top: 20px;
     }
   }
 

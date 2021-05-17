@@ -15,6 +15,11 @@ import {
   serieCharactersSuccess
 } from 'store/modules/characters/actions/serieCharacters'
 import { updateCharacter } from 'store/modules/characters/actions/updateCharacters'
+import {
+  characterInfoFailure,
+  characterInfoRequest,
+  characterInfoSuccess
+} from 'store/modules/characters/actions/infoCharacters'
 
 const charactersLoadExample = {
   total: 1,
@@ -162,6 +167,56 @@ describe('Characters Reducer', () => {
     expect(characters(updatedState, updateCharacter(updated))).toEqual(
       expect.objectContaining({
         updates: [updated]
+      })
+    )
+  })
+
+  // INFO
+  it('should be able to request the character info', () => {
+    expect(characters(INITIAL_STATE, characterInfoRequest(1009220))).toEqual(
+      expect.objectContaining({
+        loading: true,
+        noInfo: false,
+        loadError: false,
+        characterInfo: null
+      })
+    )
+  })
+
+  it('should be able to return the character info', () => {
+    expect(
+      characters(
+        INITIAL_STATE,
+        characterInfoSuccess(charactersLoadExample.characters[0])
+      )
+    ).toEqual(
+      expect.objectContaining({
+        loading: false,
+        noInfo: false,
+        loadError: false,
+        characterInfo: charactersLoadExample.characters[0]
+      })
+    )
+  })
+
+  it('should set error when no character info is found', () => {
+    expect(characters(INITIAL_STATE, characterInfoFailure(true))).toEqual(
+      expect.objectContaining({
+        loading: false,
+        characterInfo: null,
+        loadError: false,
+        noInfo: true
+      })
+    )
+  })
+
+  it('should set error when character info request fails', () => {
+    expect(characters(INITIAL_STATE, characterInfoFailure())).toEqual(
+      expect.objectContaining({
+        loading: false,
+        characterInfo: null,
+        loadError: true,
+        noInfo: false
       })
     )
   })

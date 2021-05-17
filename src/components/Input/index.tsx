@@ -63,6 +63,7 @@ const InputComponent: React.FC<InputProps> = ({
     >
       <S.InputContainer data-testid="input-container">
         <input
+          data-testid="input-component"
           onFocus={handleInputFocus}
           onBlur={handleInputBlur}
           defaultValue={defaultValue}

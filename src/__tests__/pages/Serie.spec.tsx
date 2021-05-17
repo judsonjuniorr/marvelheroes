@@ -24,13 +24,6 @@ jest.mock('react-router-dom', () => ({
   })
 }))
 
-const mockSetState = jest.fn()
-const mockState = (init: any) => [init, mockSetState]
-jest.mock('react', () => ({
-  ...jest.requireActual('react'),
-  useState: (init: any) => mockState(init)
-}))
-
 const apiResponse = {
   code: 200,
   status: 'Ok',
@@ -93,11 +86,11 @@ describe('Serie page', () => {
   })
 
   it('should show error and redirect on info request fail', async () => {
-    const stateWithError = {
+    const reduxState = {
       ...store.getState().series,
       loadError: true
     }
-    jest.spyOn(Redux, 'useSelector').mockImplementation(() => stateWithError)
+    jest.spyOn(Redux, 'useSelector').mockImplementation(() => reduxState)
     const toastError = jest.spyOn(toast, 'error')
     renderApp()
     expect(mockDispatch).toHaveBeenCalledWith(serieInfoRequest('16450'))
@@ -111,12 +104,12 @@ describe('Serie page', () => {
   })
 
   it('should show error and redirect if no result is found', async () => {
-    const stateWithError = {
+    const reduxState = {
       ...store.getState().series,
       loadError: true,
       noInfo: true
     }
-    jest.spyOn(Redux, 'useSelector').mockImplementation(() => stateWithError)
+    jest.spyOn(Redux, 'useSelector').mockImplementation(() => reduxState)
     const toastError = jest.spyOn(toast, 'warn')
     renderApp()
     expect(mockDispatch).toHaveBeenCalledWith(serieInfoRequest('16450'))
@@ -139,14 +132,14 @@ describe('Serie page', () => {
       thumbnail: serieResult.thumbnail,
       characters: serieResult.characters.available
     }
-    const stateWithError = {
+    const reduxState = {
       ...store.getState().series,
       loading: false,
       loadError: false,
       noInfo: false,
       serieInfo
     }
-    jest.spyOn(Redux, 'useSelector').mockImplementation(() => stateWithError)
+    jest.spyOn(Redux, 'useSelector').mockImplementation(() => reduxState)
 
     const { getByText } = renderApp()
     expect(mockDispatch).toHaveBeenCalledWith(serieInfoRequest('16450'))
@@ -165,14 +158,14 @@ describe('Serie page', () => {
       thumbnail: serieResult.thumbnail,
       characters: serieResult.characters.available
     }
-    const stateWithError = {
+    const reduxState = {
       ...store.getState().series,
       loading: false,
       loadError: false,
       noInfo: false,
       serieInfo
     }
-    jest.spyOn(Redux, 'useSelector').mockImplementation(() => stateWithError)
+    jest.spyOn(Redux, 'useSelector').mockImplementation(() => reduxState)
 
     const { getByText } = renderApp()
     expect(mockDispatch).toHaveBeenCalledWith(serieInfoRequest('16450'))
@@ -190,14 +183,14 @@ describe('Serie page', () => {
       thumbnail: serieResult.thumbnail,
       characters: serieResult.characters.available
     }
-    const stateWithError = {
+    const reduxState = {
       ...store.getState().series,
       loading: false,
       loadError: false,
       noInfo: false,
       serieInfo
     }
-    jest.spyOn(Redux, 'useSelector').mockImplementation(() => stateWithError)
+    jest.spyOn(Redux, 'useSelector').mockImplementation(() => reduxState)
 
     const { getByText } = renderApp()
     expect(mockDispatch).toHaveBeenCalledWith(serieInfoRequest('16450'))

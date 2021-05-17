@@ -6,7 +6,6 @@ import Lottie from 'react-lottie-player'
 import { toast } from 'react-toastify'
 import { Form } from '@unform/web'
 
-import api from 'helpers/api'
 import { IState } from 'store'
 import useDocumentTitle from 'helpers/useDocumentTitle'
 import { ISeriesState } from 'store/modules/series/types'
@@ -14,15 +13,15 @@ import { ICharactersState } from 'store/modules/characters/types'
 import { listSeriesRequest } from 'store/modules/series/actions/listSeries'
 import { updateCharacter } from 'store/modules/characters/actions/updateCharacters'
 
-import loadingAnimation from 'assets/loading.json'
-import logo from 'assets/logo-inline.svg'
+import { characterInfoRequest } from 'store/modules/characters/actions/infoCharacters'
 
 import Search from 'components/Search'
 import SeriesList from 'components/SeriesList'
-
 import InputComponent from 'components/Input'
 import TextAreaComponent from 'components/Textarea'
 
+import loadingAnimation from 'assets/loading.json'
+import logo from 'assets/logo-inline.svg'
 import * as S from './styles'
 import * as T from './types'
 
@@ -31,34 +30,26 @@ const Character: React.FC = () => {
   const { id } = useParams<T.IParams>()
   const [editMode, setEditMode] = useState(false)
   const { state, search } = useLocation<T.ILocation>()
-  const [character, setCharacter] = useState<T.ICharacter | null>(null)
   const { perPage } = useSelector<IState, ISeriesState>(st => st.series)
-  const { updates } = useSelector<IState, ICharactersState>(st => st.characters)
+  const { loadError, noInfo, characterInfo, loading } = useSelector<
+    IState,
+    ICharactersState
+  >(st => st.characters)
 
-  useDocumentTitle(character?.name || state?.name)
-
-  const charUpdated = useMemo(
-    () => updates.find(char => Number(char.id) === Number(id)) || {},
-    [id, updates]
-  )
+  useDocumentTitle(characterInfo?.name || state?.name)
 
   useEffect(() => {
-    api
-      .get<T.ICharacterRequest>(`/characters/${id}`)
-      .then(({ data }) => {
-        if (data.data.count <= 0) {
-          if (!toast.isActive('notFound'))
-            toast.error('Personagem não encontrado', { toastId: 'notFound' })
-          return
-        }
-        setCharacter({ ...data.data.results[0], ...charUpdated })
-        dispatch(listSeriesRequest({ characterID: id, page: 1 }))
-      })
-      .catch(() => {
-        if (!toast.isActive('error'))
-          toast.error('Falha ao carregar o personagem', { toastId: 'error' })
-      })
-  }, [charUpdated, dispatch, id])
+    dispatch(characterInfoRequest(id))
+  }, [dispatch, id])
+
+  useEffect(() => {
+    if (noInfo && !toast.isActive('notFound')) {
+      toast.error('Personagem não encontrado', { toastId: 'notFound' })
+    }
+    if (loadError && !toast.isActive('error')) {
+      toast.error('Falha ao carregar o personagem', { toastId: 'error' })
+    }
+  }, [loadError, noInfo])
 
   const page = useMemo(() => {
     const pageSearch = new URLSearchParams(search).get('page')
@@ -67,31 +58,31 @@ const Character: React.FC = () => {
   }, [search])
 
   useEffect(() => {
+    /* istanbul ignore else */
     if (page) dispatch(listSeriesRequest({ characterID: id, page }))
   }, [dispatch, id, page])
 
   const seriesCountDesc = useMemo(() => {
-    if (!character) return <></>
+    if (!characterInfo) return <></>
 
     let seriesText = ``
-    if (character.series.available > 0) seriesText = ' séries'
-    if (character.series.available === 1) seriesText = ' série'
+    if (characterInfo.series.available > 0) seriesText = ' séries'
+    if (characterInfo.series.available === 1) seriesText = ' série'
 
-    return character.series.available > 0 ? (
-      <span className="series">
-        <strong>{character.series.available}</strong>
+    return characterInfo.series.available > 0 ? (
+      <span className="series" data-testid="series-count">
+        <strong>{characterInfo.series.available}</strong>
         {seriesText}
       </span>
     ) : (
       <></>
     )
-  }, [character])
+  }, [characterInfo])
 
   const handleSubmit = useCallback(
     formData => {
-      setCharacter(char => (char ? { ...char, ...formData } : formData))
-      setEditMode(false)
       dispatch(updateCharacter({ id, ...formData }))
+      setEditMode(false)
     },
     [dispatch, id]
   )
@@ -104,8 +95,8 @@ const Character: React.FC = () => {
         </Link>
         <Search />
       </S.Header>
-      {!character ? (
-        <S.Loading>
+      {!characterInfo || loading ? (
+        <S.Loading data-testid="load-text">
           {state?.name && (
             <span>
               Aguarde enquanto <strong>{state.name}</strong> se prepara para a
@@ -116,6 +107,7 @@ const Character: React.FC = () => {
             play
             animationData={loadingAnimation}
             style={{ height: '200px' }}
+            data-testid="load-anim"
           />
         </S.Loading>
       ) : (
@@ -123,14 +115,15 @@ const Character: React.FC = () => {
           <Form
             onSubmit={handleSubmit}
             initialData={{
-              name: character.name,
-              description: character.description
+              name: characterInfo.name,
+              description: characterInfo.description
             }}
+            data-testid="update-form"
           >
             <S.CharacterInfo>
               <div className="thumbnail">
                 <img
-                  src={`${character.thumbnail.path}/portrait_fantastic.${character.thumbnail.extension}`}
+                  src={`${characterInfo.thumbnail.path}/portrait_fantastic.${characterInfo.thumbnail.extension}`}
                   alt=""
                 />
               </div>
@@ -140,6 +133,7 @@ const Character: React.FC = () => {
                     type="button"
                     className="editBtn"
                     onClick={() => setEditMode(true)}
+                    data-testid="toggle-edit"
                   >
                     Editar <FaPencilAlt />
                   </button>
@@ -153,12 +147,12 @@ const Character: React.FC = () => {
                     />
                   </div>
                 ) : (
-                  <h1>{character.name}</h1>
+                  <h1>{characterInfo.name}</h1>
                 )}
 
                 {seriesCountDesc}
-                {character.description && !editMode && (
-                  <p className="description">{character.description}</p>
+                {characterInfo.description && !editMode && (
+                  <p className="description">{characterInfo.description}</p>
                 )}
                 {editMode && (
                   <TextAreaComponent
@@ -172,6 +166,7 @@ const Character: React.FC = () => {
                       className="cancel"
                       type="button"
                       onClick={() => setEditMode(false)}
+                      data-testid="cancel-edit"
                     >
                       Cancelar
                     </button>
@@ -184,12 +179,15 @@ const Character: React.FC = () => {
             </S.CharacterInfo>
           </Form>
 
-          {character.series.available > 0 && (
+          {characterInfo.series.available > 0 && (
             <S.Series>
               <h1>SERIES</h1>
               <small>
-                Exibindo {page * perPage - perPage + 1} - {page * perPage} de{' '}
-                {character.series.available}
+                Exibindo {page * perPage - perPage + 1} -{' '}
+                {page * perPage > characterInfo.series.available
+                  ? characterInfo.series.available
+                  : page * perPage}{' '}
+                de {characterInfo.series.available}
               </small>
               <SeriesList />
             </S.Series>

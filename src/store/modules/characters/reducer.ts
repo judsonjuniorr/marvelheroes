@@ -15,7 +15,9 @@ export const INITIAL_STATE: ICharactersState = {
   searchResult: [],
   searchError: false,
   serieCharacters: [],
-  updates: []
+  updates: [],
+  characterInfo: null,
+  noInfo: false
 }
 
 const characters: Reducer<ICharactersState> = (
@@ -25,13 +27,53 @@ const characters: Reducer<ICharactersState> = (
   return produce(state, draft => {
     const { payload, type } = action
     switch (type) {
+      case ActionTypes.characterInfoRequest: {
+        Object.assign(draft, {
+          loading: true,
+          noInfo: false,
+          loadError: false,
+          characterInfo: null
+        })
+
+        return draft
+      }
+      case ActionTypes.characterInfoSuccess: {
+        Object.assign(draft, {
+          loading: false,
+          noInfo: false,
+          loadError: false,
+          characterInfo: payload.characterInfo
+        })
+
+        return draft
+      }
+      case ActionTypes.characterInfoFailure: {
+        Object.assign(draft, {
+          loading: false,
+          characterInfo: null,
+          loadError: !payload.noInfo,
+          noInfo: payload.noInfo
+        })
+
+        return draft
+      }
+
       case ActionTypes.updateCharacter: {
         const updatesFiltered = draft.updates.filter(
           char => char.id !== payload.id
         )
         updatesFiltered.push(payload)
 
-        return { ...draft, updates: updatesFiltered }
+        Object.assign(draft, {
+          characterInfo: {
+            ...draft.characterInfo,
+            name: payload.name,
+            description: payload.description
+          },
+          updates: updatesFiltered
+        })
+
+        return draft
       }
 
       case ActionTypes.serieCharactersRequest: {

@@ -7,18 +7,19 @@ import { Form } from '@unform/web'
 import { searchCharactersRequest } from 'store/modules/characters/actions/searchCharacters'
 import InputComponent from 'components/Input'
 import { IState } from 'store'
+import { ICharactersState } from 'store/modules/characters/types'
 
 const Search: React.FC = () => {
   const history = useHistory()
   const formRef = useRef<FormHandles>(null)
-  const query = useSelector<IState, string>(
-    state => state.characters.searchQuery
+  const { searchQuery } = useSelector<IState, ICharactersState>(
+    state => state.characters
   )
   const dispatch = useDispatch()
 
   useEffect(() => {
-    formRef.current?.setFieldValue('query', query)
-  }, [query])
+    formRef.current?.setFieldValue('query', searchQuery)
+  }, [searchQuery])
 
   const handleSubmit = useCallback(
     formData => {

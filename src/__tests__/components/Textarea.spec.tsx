@@ -31,7 +31,7 @@ describe('Textarea component', () => {
     )
 
     const inputElement = getByPlaceholderText('Descrição')
-    const containerElement = getByTestId('input-container')
+    const containerElement = getByTestId('textarea-container')
 
     fireEvent.focus(inputElement)
 
@@ -56,7 +56,7 @@ describe('Textarea component', () => {
     )
 
     const inputElement = getByPlaceholderText('Descrição')
-    const containerElement = getByTestId('input-container')
+    const containerElement = getByTestId('textarea-container')
 
     fireEvent.change(inputElement, {
       target: { value: 'johndoe@example.com.br' }
@@ -84,7 +84,7 @@ describe('Textarea component', () => {
       <Textarea name="description" placeholder="Descrição" />
     )
 
-    const containerElement = getByTestId('input-container')
+    const containerElement = getByTestId('textarea-container')
 
     await waitFor(() => {
       expect(containerElement).toHaveStyle(

@@ -20,10 +20,17 @@ import {
   serieCharactersRequest,
   serieCharactersSuccess
 } from './actions/serieCharacters'
+import {
+  characterInfoFailure,
+  characterInfoRequest,
+  characterInfoSuccess
+} from './actions/infoCharacters'
+import { listSeriesRequest } from '../series/actions/listSeries'
 
 type LoadAllCharactersRequest = ReturnType<typeof loadAllCharactersRequest>
 type SearchCharactersRequest = ReturnType<typeof searchCharactersRequest>
 type SerieCharactersRequest = ReturnType<typeof serieCharactersRequest>
+type CharacterInfoRequest = ReturnType<typeof characterInfoRequest>
 
 interface ILoadCharactersResponse {
   offset: number
@@ -31,6 +38,31 @@ interface ILoadCharactersResponse {
   total: number
   count: number
   results: ICharacter[]
+}
+
+interface ICharacterInfoRequest {
+  data: {
+    count: number
+    results: [
+      {
+        id: number
+        name: string
+        description: string
+        thumbnail: {
+          path: string
+          extension: string
+        }
+        series: {
+          available: number
+          collectionURI: string
+          items: {
+            resourceURI: string
+            name: string
+          }[]
+        }
+      }
+    ]
+  }
 }
 
 export function* loadAllCharacters({ payload }: LoadAllCharactersRequest) {
@@ -186,8 +218,43 @@ export function* serieCharacters({ payload }: SerieCharactersRequest) {
   }
 }
 
+function* serieInfo({ payload }: CharacterInfoRequest) {
+  const { id } = payload
+
+  const apiCall = () => {
+    return api
+      .get<ICharacterInfoRequest>(`/characters/${id}`)
+      .then(r => r.data)
+      .catch(e => {
+        throw e
+      })
+  }
+
+  try {
+    const seriesRequest: ICharacterInfoRequest = yield call(apiCall)
+    if (Number(seriesRequest.data.count) <= 0)
+      yield put(characterInfoFailure(true))
+    else {
+      const { updates } = yield select(st => st.characters)
+      const charUpdated =
+        updates.find((char: ICharacter) => Number(char.id) === Number(id)) || {}
+
+      const serieInfoData: ICharacter = {
+        ...seriesRequest.data.results[0],
+        ...charUpdated
+      }
+
+      yield put(characterInfoSuccess(serieInfoData))
+      yield put(listSeriesRequest({ characterID: id, page: 1 }))
+    }
+  } catch (error) {
+    yield put(characterInfoFailure())
+  }
+}
+
 export default all([
   takeLatest(ActionTypes.loadAllCharactersRequest, loadAllCharacters),
   takeLatest(ActionTypes.searchCharactersRequest, searchCharacters),
-  takeLatest(ActionTypes.serieCharactersRequest, serieCharacters)
+  takeLatest(ActionTypes.serieCharactersRequest, serieCharacters),
+  takeLatest(ActionTypes.characterInfoRequest, serieInfo)
 ])

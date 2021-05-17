@@ -7,6 +7,7 @@ const Footer: React.FC = () => {
         href="http://marvel.com"
         target="_blank"
         rel="noopener noreferer noreferrer"
+        data-testid="copyright"
       >
         Data provided by Marvel. © 2021 MARVEL
       </a>

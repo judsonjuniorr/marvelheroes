@@ -2,6 +2,7 @@ import { ActionTypes, ISeriesInfo } from '../types'
 
 interface IListSeriesSuccess {
   total: number
+  page: number
   series: ISeriesInfo[]
 }
 interface IListSeriesRequest {

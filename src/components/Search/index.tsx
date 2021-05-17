@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { useHistory } from 'react-router-dom'
 import { FormHandles } from '@unform/core'
-import { useHistory } from 'react-router'
 import { Form } from '@unform/web'
 
 import { searchCharactersRequest } from 'store/modules/characters/actions/searchCharacters'
@@ -25,12 +25,17 @@ const Search: React.FC = () => {
       dispatch(searchCharactersRequest(formData.query))
       history.push({ pathname: '/search', search: `?query=${formData.query}` })
     },
+
     [dispatch, history]
   )
 
   return (
-    <Form ref={formRef} onSubmit={handleSubmit}>
-      <InputComponent name="query" placeholder="Pesquise pelo personagem" />
+    <Form ref={formRef} onSubmit={handleSubmit} data-testid="search-form">
+      <InputComponent
+        name="query"
+        placeholder="Pesquise pelo personagem"
+        data-testid="search-input"
+      />
     </Form>
   )
 }

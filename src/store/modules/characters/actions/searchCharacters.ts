@@ -2,6 +2,7 @@ import { ActionTypes, ICharacter } from '../types'
 
 interface ILoadCharactersSuccess {
   total: number
+  page: number
   characters: ICharacter[]
 }
 

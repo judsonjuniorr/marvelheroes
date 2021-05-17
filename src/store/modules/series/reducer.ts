@@ -3,7 +3,7 @@ import produce from 'immer'
 
 import { ActionTypes, ISeriesState } from './types'
 
-const INITIAL_STATE: ISeriesState = {
+export const INITIAL_STATE: ISeriesState = {
   series: [],
   page: 1,
   maxPages: 1,
@@ -11,7 +11,9 @@ const INITIAL_STATE: ISeriesState = {
   total: 0,
   loading: true,
   loadError: false,
-  characterID: 0
+  characterID: 0,
+  serieInfo: null,
+  noInfo: false
 }
 
 const characters: Reducer<ISeriesState> = (state = INITIAL_STATE, action) => {
@@ -33,7 +35,7 @@ const characters: Reducer<ISeriesState> = (state = INITIAL_STATE, action) => {
           page: payload.page,
           series: payload.series,
           maxPages: Math.ceil(payload.total / draft.perPage),
-          total: payload.total ?? 0,
+          total: payload.total,
           loadError: false,
           loading: false
         })
@@ -43,6 +45,38 @@ const characters: Reducer<ISeriesState> = (state = INITIAL_STATE, action) => {
 
       case ActionTypes.listSeriesFailure: {
         Object.assign(draft, { loadError: true, loading: false })
+
+        return draft
+      }
+
+      case ActionTypes.serieInfoRequest: {
+        Object.assign(draft, {
+          serieInfo: null,
+          loading: true,
+          loadError: false
+        })
+
+        return draft
+      }
+
+      case ActionTypes.serieInfoSuccess: {
+        Object.assign(draft, {
+          serieInfo: payload.serieInfo,
+          loading: false,
+          loadError: false,
+          noInfo: false
+        })
+
+        return draft
+      }
+
+      case ActionTypes.serieInfoFailure: {
+        Object.assign(draft, {
+          serieInfo: null,
+          loading: false,
+          loadError: !payload.noInfo,
+          noInfo: payload.noInfo
+        })
 
         return draft
       }

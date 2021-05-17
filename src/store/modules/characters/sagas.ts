@@ -33,7 +33,7 @@ interface ILoadCharactersResponse {
   results: ICharacter[]
 }
 
-function* loadAllCharacters({ payload }: LoadAllCharactersRequest) {
+export function* loadAllCharacters({ payload }: LoadAllCharactersRequest) {
   const { page } = payload
   const perPage: number = yield select(state => state.characters.perPage)
   const offset = (page - 1) * perPage
@@ -92,7 +92,7 @@ function* loadAllCharacters({ payload }: LoadAllCharactersRequest) {
   }
 }
 
-function* searchCharacters({ payload }: SearchCharactersRequest) {
+export function* searchCharacters({ payload }: SearchCharactersRequest) {
   const { query } = payload
   const updates: IUpdates[] = yield select(state => state.characters.updates)
 
@@ -126,18 +126,14 @@ function* searchCharacters({ payload }: SearchCharactersRequest) {
 
     const charactersResult = {
       total: charactersRequest.data.total,
-      characters: charactersRequest.data.results.map(r => {
-        const updated = updates.find(c => Number(c.id) === Number(r.id)) || {}
-
-        return {
-          id: r.id,
-          name: r.name,
-          description: r.description,
-          thumbnail: r.thumbnail,
-          series: r.series,
-          ...updated
-        }
-      })
+      page: 1,
+      characters: charactersRequest.data.results.map(r => ({
+        id: r.id,
+        name: r.name,
+        description: r.description,
+        thumbnail: r.thumbnail,
+        series: r.series
+      }))
     }
 
     sessionStorage.setItem(
@@ -151,7 +147,7 @@ function* searchCharacters({ payload }: SearchCharactersRequest) {
   }
 }
 
-function* serieCharacters({ payload }: SerieCharactersRequest) {
+export function* serieCharacters({ payload }: SerieCharactersRequest) {
   const { serieID } = payload
   const updates: IUpdates[] = yield select(state => state.characters.updates)
 

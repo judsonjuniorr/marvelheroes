@@ -1,12 +1,8 @@
-import { useHistory, useParams } from 'react-router'
-import { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useHistory, useParams, Link } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
 import Lottie from 'react-lottie-player'
-import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
-
-import api from 'helpers/api'
-import useDocumentTitle from 'helpers/useDocumentTitle'
+import { useEffect } from 'react'
 
 import CharacterList from 'components/CharacterList'
 import Search from 'components/Search'
@@ -15,6 +11,9 @@ import loadingAnimation from 'assets/loading.json'
 import logo from 'assets/logo-inline.svg'
 
 import { serieCharactersRequest } from 'store/modules/characters/actions/serieCharacters'
+import { IState } from 'store'
+import { ISeriesState } from 'store/modules/series/types'
+import { serieInfoRequest } from 'store/modules/series/actions/serieInfo'
 import * as S from './styles'
 import * as T from './types'
 
@@ -23,40 +22,32 @@ const Serie: React.FC = () => {
   const dispatch = useDispatch()
   const history = useHistory()
 
-  const [isLoading, setIsLoading] = useState(true)
-  const [serie, setSerie] = useState<T.ISerieInfo | null>(null)
-  useDocumentTitle(serie?.title)
+  const { serieInfo, loading, loadError, noInfo } = useSelector<
+    IState,
+    ISeriesState
+  >(state => state.series)
 
   useEffect(() => {
-    setIsLoading(true)
-    api
-      .get<T.ISerieRequest>(`/series/${params.id}`)
-      .then(({ data }) => {
-        if (data.data.total <= 0) {
-          toast.warn('Nenhuma serie encontrada para esse ID')
-          return history.push('/')
-        }
-        const serieResult = data.data.results[0]
-        setSerie({
-          title: serieResult.title.split(' (')[0],
-          description: serieResult.description,
-          startYear: serieResult.startYear,
-          endYear: serieResult.endYear,
-          thumbnail: serieResult.thumbnail,
-          characters: serieResult.characters.available
-        })
-        return setIsLoading(false)
-      })
-      .catch(() => {
-        toast.error('Falha ao buscar sua serie, tente mais tarde')
-        history.push('/')
-      })
-  }, [history, params])
+    if (noInfo) {
+      toast.warn('Nenhuma serie encontrada para esse ID')
+      return history.push('/')
+    }
+    if (loadError) {
+      toast.error('Falha ao buscar sua serie, tente mais tarde')
+      return history.push('/')
+    }
+
+    return () => {}
+  }, [history, loadError, noInfo])
 
   useEffect(() => {
-    if (serie && serie.characters > 0)
+    dispatch(serieInfoRequest(params.id))
+  }, [dispatch, params.id])
+
+  useEffect(() => {
+    if (serieInfo && serieInfo.characters && serieInfo.characters > 0)
       dispatch(serieCharactersRequest(params.id))
-  }, [dispatch, params.id, serie])
+  }, [dispatch, params.id, serieInfo])
 
   return (
     <>
@@ -66,39 +57,40 @@ const Serie: React.FC = () => {
         </Link>
         <Search />
       </S.Header>
-      {isLoading || !serie ? (
+      {loading || !serieInfo ? (
         <S.Loading>
           <Lottie
             play
             animationData={loadingAnimation}
             style={{ height: '200px' }}
+            data-testid="loading-anim"
           />
         </S.Loading>
       ) : (
         <S.Content>
           <S.SerieInfo>
             <img
-              src={`${serie.thumbnail.path}/portrait_fantastic.${serie.thumbnail.extension}`}
+              src={`${serieInfo.thumbnail.path}/portrait_fantastic.${serieInfo.thumbnail.extension}`}
               alt=""
               className="thumbnail"
             />
             <div className="info">
-              <h1>{serie.title}</h1>
+              <h1>{serieInfo.title}</h1>
               <span className="year">
-                {serie.startYear === serie?.endYear
-                  ? serie.startYear
-                  : `${serie.startYear} - ${serie?.endYear || '.'}`}
+                {serieInfo.startYear === serieInfo?.endYear
+                  ? serieInfo.startYear
+                  : `${serieInfo.startYear} - ${serieInfo?.endYear || '.'}`}
               </span>
-              {serie.description && (
-                <p className="description">{serie.description}</p>
+              {serieInfo.description && (
+                <p className="description">{serieInfo.description}</p>
               )}
             </div>
           </S.SerieInfo>
 
-          {serie.characters > 0 && (
+          {serieInfo.characters && serieInfo.characters > 0 && (
             <S.Characters>
               <h1>PERSONAGENS</h1>
-              <small>{serie.characters} participaram dessa série</small>
+              <small>{serieInfo.characters} participaram dessa série</small>
               <CharacterList />
             </S.Characters>
           )}

@@ -1,13 +1,16 @@
 export enum ActionTypes {
   listSeriesRequest = '@series/LIST_SERIES_REQUEST',
   listSeriesSuccess = '@series/LIST_SERIES_SUCCESS',
-  listSeriesFailure = '@series/LIST_SERIES_FAILURE'
+  listSeriesFailure = '@series/LIST_SERIES_FAILURE',
+  serieInfoRequest = '@series/SERIE_INFO_REQUEST',
+  serieInfoSuccess = '@series/SERIE_INFO_SUCCESS',
+  serieInfoFailure = '@series/SERIE_INFO_FAILURE'
 }
 
 export interface ISeriesInfo {
   id: number
   title: string
-  description: string
+  description: string | null
   startYear: number
   endYear: number
   rating: string
@@ -15,6 +18,7 @@ export interface ISeriesInfo {
     path: string
     extension: string
   }
+  characters?: number
 }
 
 export interface ISeriesState {
@@ -26,4 +30,6 @@ export interface ISeriesState {
   total: number
   loading: boolean
   loadError: boolean
+  serieInfo: ISeriesInfo | null
+  noInfo: boolean
 }

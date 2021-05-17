@@ -61,7 +61,7 @@ const InputComponent: React.FC<InputProps> = ({
       isFocused={isFocused || alwaysFocus}
       isReadOnly={!!readOnly}
     >
-      <S.InputContainer>
+      <S.InputContainer data-testid="input-container">
         <input
           onFocus={handleInputFocus}
           onBlur={handleInputBlur}

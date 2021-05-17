@@ -21,7 +21,7 @@ const SeriesList: React.FC = () => {
     if (series.series.length <= 0) return <></>
 
     return series.series.map(serie => (
-      <S.SerieInfo key={serie.id}>
+      <S.SerieInfo key={serie.id} data-testid="serie-card">
         <Link to={`/serie/${serie.id}`}>
           <div className="cover">
             <LazyLoad>
@@ -50,7 +50,7 @@ const SeriesList: React.FC = () => {
   const skeletonList = useMemo(() => {
     return [...Array(28).keys()].map(key => {
       return (
-        <S.SerieInfo key={key}>
+        <S.SerieInfo key={key} data-testid="serie-load-card">
           <div className="cover skeleton-load" />
           <div className="moreInfo">
             <span className="year skeleton-load" />
@@ -64,7 +64,7 @@ const SeriesList: React.FC = () => {
   return (
     <S.Listing>
       {series.page > 1 && (
-        <S.MovePage>
+        <S.MovePage data-testid="prevPage">
           <Link
             to={{
               pathname: `/character/${series.characterID}`,
@@ -74,7 +74,11 @@ const SeriesList: React.FC = () => {
             <span>Página anterior</span>
             <div className="iconWrapper">
               {series.loading ? (
-                <ImSpinner9 className="loading" size={35} />
+                <ImSpinner9
+                  className="loading"
+                  size={35}
+                  data-testid="loading-spinner"
+                />
               ) : (
                 <>
                   <FaAngleDoubleLeft className="icon hover" size={32} />
@@ -90,7 +94,7 @@ const SeriesList: React.FC = () => {
       )}
       {series.loading ? skeletonList : seriesList}
       {series.page < series.maxPages && (
-        <S.MovePage>
+        <S.MovePage data-testid="nextPage">
           <Link
             to={{
               pathname: `/character/${series.characterID}`,
@@ -100,7 +104,11 @@ const SeriesList: React.FC = () => {
             <span>Prox. Página</span>
             <div className="iconWrapper">
               {series.loading ? (
-                <ImSpinner9 className="loading" size={35} />
+                <ImSpinner9
+                  className="loading"
+                  size={35}
+                  data-testid="loading-spinner"
+                />
               ) : (
                 <>
                   <FaAngleRight className="icon" size={32} />

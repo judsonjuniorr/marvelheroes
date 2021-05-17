@@ -1,4 +1,4 @@
-import { all, call, put, select, takeLeading } from 'redux-saga/effects'
+import { all, call, put, select, takeLatest } from 'redux-saga/effects'
 import { AxiosResponse } from 'axios'
 
 import api from 'helpers/api'
@@ -10,8 +10,14 @@ import {
   listSeriesRequest,
   listSeriesSuccess
 } from './actions/listSeries'
+import {
+  serieInfoFailure,
+  serieInfoRequest,
+  serieInfoSuccess
+} from './actions/serieInfo'
 
 type ListSeriesRequest = ReturnType<typeof listSeriesRequest>
+type SerieInfoRequest = ReturnType<typeof serieInfoRequest>
 
 interface IListSeriesResponse {
   offset: number
@@ -19,6 +25,26 @@ interface IListSeriesResponse {
   total: number
   count: number
   results: ISeriesInfo[]
+}
+
+export interface ISerieInfoResponse {
+  data: {
+    total: number
+    results: {
+      id: number
+      title: string
+      description: string | null
+      startYear: number
+      endYear: number
+      thumbnail: {
+        path: string
+        extension: string
+      }
+      characters: {
+        available: number
+      }
+    }[]
+  }
 }
 
 function* listSeries({ payload }: ListSeriesRequest) {
@@ -71,4 +97,41 @@ function* listSeries({ payload }: ListSeriesRequest) {
   }
 }
 
-export default all([takeLeading(ActionTypes.listSeriesRequest, listSeries)])
+function* serieInfo({ payload }: SerieInfoRequest) {
+  const { id } = payload
+
+  const apiCall = () => {
+    return api
+      .get<ISerieInfoResponse>(`/series/${id}`)
+      .then(r => r.data)
+      .catch(e => {
+        throw e
+      })
+  }
+
+  try {
+    const seriesRequest: ISerieInfoResponse = yield call(apiCall)
+    if (Number(seriesRequest.data.total) <= 0) yield put(serieInfoFailure(true))
+
+    const serieResult = seriesRequest.data.results[0]
+    const serieInfoData: ISeriesInfo = {
+      id: Number(id),
+      rating: '',
+      title: serieResult.title.split(' (')[0],
+      description: serieResult.description,
+      startYear: serieResult.startYear,
+      endYear: serieResult.endYear,
+      thumbnail: serieResult.thumbnail,
+      characters: serieResult.characters.available
+    }
+
+    yield put(serieInfoSuccess(serieInfoData))
+  } catch (error) {
+    yield put(serieInfoFailure())
+  }
+}
+
+export default all([
+  takeLatest(ActionTypes.listSeriesRequest, listSeries),
+  takeLatest(ActionTypes.serieInfoRequest, serieInfo)
+])

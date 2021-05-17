@@ -1,6 +1,6 @@
-import { useHistory, useLocation } from 'react-router'
-import { useEffect, useMemo } from 'react'
+import { useHistory, useLocation, Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
+import { useEffect, useMemo } from 'react'
 import { toast } from 'react-toastify'
 
 import { IState } from 'store'
@@ -11,7 +11,6 @@ import Search from 'components/Search'
 
 import wave from 'assets/wave.svg'
 import logo from 'assets/logo-inline.svg'
-import { Link } from 'react-router-dom'
 import CharacterList from 'components/CharacterList'
 import { searchCharactersRequest } from 'store/modules/characters/actions/searchCharacters'
 import * as S from './styles'
@@ -42,7 +41,7 @@ const SearchResults: React.FC = () => {
   )
 
   useEffect(() => {
-    if (!searchQuery && query) dispatch(searchCharactersRequest(query))
+    if (!searchQuery && !!query) dispatch(searchCharactersRequest(query))
   }, [dispatch, query, searchQuery])
 
   return (

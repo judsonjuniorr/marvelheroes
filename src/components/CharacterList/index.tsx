@@ -4,7 +4,7 @@ import {
   FaAngleLeft,
   FaAngleRight
 } from 'react-icons/fa'
-import { Link, useHistory, useLocation } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { ImSpinner9 } from 'react-icons/im'
 import { useEffect, useMemo } from 'react'
@@ -19,7 +19,6 @@ import * as S from './styles'
 const CharacterList: React.FC = () => {
   const { searchResult, characters, loading, maxPages, page, serieCharacters } =
     useSelector<IState, ICharactersState>(state => state.characters)
-  const history = useHistory()
   const { search, pathname } = useLocation()
   const dispatch = useDispatch()
 
@@ -28,7 +27,7 @@ const CharacterList: React.FC = () => {
     if (isSearch) return searchResult
 
     const isSerie = pathname.includes('serie')
-    if (isSerie) return serieCharacters
+    if (isSerie) return serieCharacters || []
 
     return characters
   }, [characters, pathname, searchResult, serieCharacters])
@@ -36,11 +35,13 @@ const CharacterList: React.FC = () => {
   const characterList = useMemo(() => {
     return charactersList.map(character => {
       let series = ``
+      /* istanbul ignore else */
       if (character.series.available > 0) series = 'séries'
+      /* istanbul ignore else */
       if (character.series.available === 1) series = 'série'
 
       return (
-        <S.CharacterItem key={character.id}>
+        <S.CharacterItem key={character.id} data-testid="character-item">
           <Link
             to={{
               pathname: `/character/${character.id}`,
@@ -56,7 +57,7 @@ const CharacterList: React.FC = () => {
             </LazyLoad>
             <div className="description">
               <span className="name">{character.name}</span>
-              <div className="series">
+              <div className="series" data-testid="serie-amount">
                 {character.series.available > 0 ? (
                   <strong>{character.series.available} </strong>
                 ) : (
@@ -74,7 +75,7 @@ const CharacterList: React.FC = () => {
   const skeletonList = useMemo(() => {
     return [...Array(28).keys()].map(key => {
       return (
-        <S.CharacterItem key={key}>
+        <S.CharacterItem key={key} data-testid="character-load-card">
           <div className="thumbnail skeleton-load" />
           <div className="description">
             <span className="name skeleton-load" />
@@ -96,17 +97,21 @@ const CharacterList: React.FC = () => {
   const prevPage = useMemo(
     () =>
       page > 1 && (
-        <S.CharacterItem className="pageAction">
+        <S.CharacterItem className="pageAction" data-testid="prevPage">
           <Link
             to={{
-              pathname: history.location.pathname,
+              pathname,
               search: `?page=${page - 1}`
             }}
           >
             <span>Página anterior</span>
             <div className="iconWrapper">
               {loading ? (
-                <ImSpinner9 className="loading" size={22} />
+                <ImSpinner9
+                  className="loading"
+                  size={22}
+                  data-testid="loading-spinner"
+                />
               ) : (
                 <>
                   <FaAngleDoubleLeft className="icon hover" size={19} />
@@ -120,23 +125,27 @@ const CharacterList: React.FC = () => {
           </Link>
         </S.CharacterItem>
       ),
-    [history.location.pathname, loading, maxPages, page]
+    [loading, maxPages, page, pathname]
   )
 
   const nextPage = useMemo(
     () =>
       maxPages > page && (
-        <S.CharacterItem className="pageAction">
+        <S.CharacterItem className="pageAction" data-testid="nextPage">
           <Link
             to={{
-              pathname: history.location.pathname,
+              pathname,
               search: `?page=${page + 1}`
             }}
           >
             <span>Prox. Página</span>
             <div className="iconWrapper">
               {loading ? (
-                <ImSpinner9 className="loading" size={22} />
+                <ImSpinner9
+                  className="loading"
+                  size={22}
+                  data-testid="loading-spinner"
+                />
               ) : (
                 <>
                   <FaAngleRight className="icon" size={19} />
@@ -150,7 +159,7 @@ const CharacterList: React.FC = () => {
           </Link>
         </S.CharacterItem>
       ),
-    [history.location.pathname, loading, maxPages, page]
+    [loading, maxPages, page, pathname]
   )
 
   return (

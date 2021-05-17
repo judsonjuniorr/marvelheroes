@@ -3,7 +3,7 @@ import produce from 'immer'
 
 import { ActionTypes, ICharactersState } from './types'
 
-const INITIAL_STATE: ICharactersState = {
+export const INITIAL_STATE: ICharactersState = {
   characters: [],
   page: 1,
   maxPages: 1,
@@ -98,7 +98,7 @@ const characters: Reducer<ICharactersState> = (
           page: payload.page,
           characters: payload.characters,
           maxPages: Math.ceil(payload.total / draft.perPage),
-          total: payload.total ?? 0,
+          total: payload.total,
           loadError: false,
           loading: false
         })

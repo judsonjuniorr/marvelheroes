@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { useHistory } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { useEffect } from 'react'
 
@@ -26,23 +26,23 @@ import * as S from './styles'
 const Home: React.FC = () => {
   const dispatch = useDispatch()
   const history = useHistory()
+  const location = useLocation()
   useDocumentTitle()
 
-  const { loadError, total, page, maxPages } = useSelector<
-    IState,
-    ICharactersState
-  >(state => state.characters)
+  const { loadError, total, page } = useSelector<IState, ICharactersState>(
+    state => state.characters
+  )
 
   useEffect(() => {
-    const pageUrl = new URLSearchParams(history.location.search).get('page')
+    const pageUrl = new URLSearchParams(location.search).get('page')
     let searchPage = page
     if (pageUrl) searchPage = Number(pageUrl)
 
     dispatch(loadAllCharactersRequest(searchPage))
     if (searchPage !== 1) {
-      history.replace(`/?page=${searchPage}`)
-    } else history.replace(`/`)
-  }, [dispatch, history, maxPages, page])
+      history.push(`/?page=${searchPage}`)
+    } else history.push(`/`)
+  }, [dispatch, history, location?.search, page])
 
   useEffect(() => {
     if (loadError && !toast.isActive('loadError'))
@@ -57,8 +57,10 @@ const Home: React.FC = () => {
         <S.Logo
           src={logo}
           alt="MARVEL HEROES"
+          data-testid="app-logo"
           onClick={() => {
             history.push('/')
+            /* istanbul ignore else */
             if (page !== 1) dispatch(loadAllCharactersRequest(1))
           }}
         />

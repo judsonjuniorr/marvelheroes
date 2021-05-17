@@ -1,9 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import { Link, useLocation, useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { useLocation, useParams } from 'react-router'
 import { FaPencilAlt } from 'react-icons/fa'
 import Lottie from 'react-lottie-player'
-import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { Form } from '@unform/web'
 

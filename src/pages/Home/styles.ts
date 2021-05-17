@@ -79,7 +79,7 @@ export const Main = styled.header`
     pointer-events: none;
     bottom: 0;
     z-index: -1;
-    transition: all 0.6s;
+    transition: all 0.2s;
     opacity: 0;
 
     &.superman {
@@ -96,9 +96,6 @@ export const Main = styled.header`
       max-height: 55%;
       transform: translateX(10vw) scaleX(-1);
       left: 27vw;
-      animation-name: ${greenLanternAnimation};
-      animation-duration: 2s;
-      animation-fill-mode: forwards;
     }
 
     &.ironman {
@@ -107,9 +104,6 @@ export const Main = styled.header`
       margin: auto;
       max-height: 75%;
       transform: scaleX(-1);
-      animation-name: ${ironManAnimation};
-      animation-duration: 3s;
-      animation-fill-mode: forwards;
     }
 
     &.captainww {
@@ -184,6 +178,22 @@ export const Main = styled.header`
       &.captainww {
         max-width: 55vw;
       }
+    }
+  }
+
+  ${Breakpoints.sm} {
+    .character.ironman {
+      animation-name: ${ironManAnimation};
+      animation-duration: 3s;
+      animation-fill-mode: forwards;
+    }
+  }
+
+  ${Breakpoints.md} {
+    .character.greenlantern {
+      animation-name: ${greenLanternAnimation};
+      animation-duration: 2s;
+      animation-fill-mode: forwards;
     }
   }
 `

@@ -8,7 +8,7 @@
 <br />
 <p align="center">
   <a href="https://github.com/judsonjuniorr/marvelheroes">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+    <img src="src/assets/logo.png" alt="Logo" height="80">
   </a>
 
   <h3 align="center">Marvel Heroes</h3>
@@ -41,9 +41,13 @@
         <li><a href="#installation">Instalação</a></li>
       </ul>
     </li>
-    <li><a href="#usage">Uso</a></li>
-    <li><a href="#contact">Contato</a></li>
-    <li><a href="#acknowledgements">Referências</a></li>
+    <li>
+      <a href="#usage">Uso</a>
+      <ul>
+        <li><a href="#use-home">Página inicial</a></li>
+        <li><a href="#use-search">Pesquisa</a></li>
+      </ul>
+    </li>
   </ol>
 </details>
 
@@ -55,7 +59,8 @@
 
 [![Marvel Heroes][product-screenshot]][demo-url]
 
-Descrição em breve...
+Esse projeto tem como objetivo permitir ao usuário listar/buscar todos os personagens da marvel e realizar alterações no nome e descrição do mesmo.
+Contamos com uma relação de todas as séries disponíveis para cada personagem, ao acessar a página de perfil da série é possível também visualizar todos os personagens que participaram dela.
 
 ### Feito com ❤ e
 
@@ -108,20 +113,46 @@ Aqui temos uma lista das aplicações que são necessárias para ter seu projeto
 
 ## Uso
 
-Em breve descrições de como utilizar a ferramenta...
+### <strong id="use-home">Página inicial</strong>
 
-<!-- Referências -->
+- No topo do conteúdo você encontrará uma box para que seja feito a pesquisa do nome do personagem, essa pesquisa é feita a partir do inicio do nome do personagem.
 
-## Referências
+  Ex.: Para pesquisar Super-Man deverá colocar o inicio do nome, como Sup ou Super e apertar enter
 
-- []()
-- []()
-- []()
+    <img src="docs/searchBox.png" alt="" height="50" />
+
+- Na pagina inicial irá carregar automaticamente 28 personagens possibilitando carregar mais atráves da navegação.
+
+    <img src="docs/characterList.png" alt="" height="150" />
+
+- O botão de próxima página é apresentado como um card no final da listagem
+
+    <img src="docs/characterNextPage.png" alt="" height="150" />
+
+- Quando estiver em uma página que seja diferente da primeira você poderá encontrar um outro card no inicio da listagem que ao clicar permite voltar a tela inicial
+
+    <img src="docs/characterPrevPage.png" alt="" height="150" />
+
+- ! Clicando no card de um personagem irá te direcionar para o perfil dele.
+
+### <strong id="use-search">Pesquisa</strong>
+
+- Após realizar uma pesquisa você será direcionado a tela de resultados, onde no topo poderá encontrar o termo que foi informado para a realização da consulta
+
+    <img src="docs/searchHeader.png" alt="" height="100" />
+
+- Logo abaixo temos o box de pesquisa, onde você poderá digitar outro termo e apertar enter para realizar uma nova consulta, o valor inicial será o termo que foi consultado.
+
+    <img src="docs/searchPageInput.png" alt="" height="50" />
+
+- Na listagem temos todos o resultado de todos os personagens encontrados para o termo informado
+
+    <img src="docs/searchResult.png" alt="" height="250" />
 
 <!-- MARKDOWN LINKS -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/judsonjuniorr
-[product-screenshot]: images/screenshot.png
+[product-screenshot]: docs/preview.png
 [demo-url]: https://github.com/judsonjuniorr/marvelheroes

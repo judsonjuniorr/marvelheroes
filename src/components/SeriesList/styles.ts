@@ -15,7 +15,7 @@ export const Listing = styled.ul`
 
 export const MovePage = styled.li`
   width: 100%;
-  min-height: 202px;
+  min-height: 195px;
   height: 100%;
 
   > a {
@@ -77,7 +77,7 @@ export const SerieInfo = styled.li`
     display: block;
     position: relative;
     width: 100%;
-    min-height: 202px;
+    min-height: 195px;
     background: #222;
     border-top-left-radius: 7px;
     border-top-right-radius: 7px;

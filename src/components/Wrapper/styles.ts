@@ -7,7 +7,7 @@ export const Container = styled.div`
   margin: 0 2%;
 
   ${breakpoints.smOnly} {
-    max-width: 540px;
+    max-width: calc(540px - 2vw);
     margin: 0 auto;
   }
   ${breakpoints.mdOnly} {

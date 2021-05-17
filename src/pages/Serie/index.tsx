@@ -4,16 +4,18 @@ import Lottie from 'react-lottie-player'
 import { toast } from 'react-toastify'
 import { useEffect } from 'react'
 
+import { IState } from 'store'
+import useDocumentTitle from 'helpers/useDocumentTitle'
+import { ISeriesState } from 'store/modules/series/types'
+import { serieInfoRequest } from 'store/modules/series/actions/serieInfo'
+import { serieCharactersRequest } from 'store/modules/characters/actions/serieCharacters'
+
 import CharacterList from 'components/CharacterList'
 import Search from 'components/Search'
 
 import loadingAnimation from 'assets/loading.json'
 import logo from 'assets/logo-inline.svg'
 
-import { serieCharactersRequest } from 'store/modules/characters/actions/serieCharacters'
-import { IState } from 'store'
-import { ISeriesState } from 'store/modules/series/types'
-import { serieInfoRequest } from 'store/modules/series/actions/serieInfo'
 import * as S from './styles'
 import * as T from './types'
 
@@ -26,6 +28,7 @@ const Serie: React.FC = () => {
     IState,
     ISeriesState
   >(state => state.series)
+  useDocumentTitle(serieInfo?.title)
 
   useEffect(() => {
     if (noInfo) {

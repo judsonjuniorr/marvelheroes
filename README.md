@@ -20,7 +20,7 @@
     <small style="opacity: 0.7">Clark Kent / Kal-El (Superman)</small>
     <br />
     <br />
-    <a href="https://github.com/judsonjuniorr/marvelheroes"><strong>Visualizar demo</strong></a>
+    <a href="https://marvelheroes.judsonjunior.com/"><strong>Visualizar demo</strong></a>
   </p>
 </p>
 
@@ -46,6 +46,8 @@
       <ul>
         <li><a href="#use-home">Página inicial</a></li>
         <li><a href="#use-search">Pesquisa</a></li>
+        <li><a href="#use-char">Perfil do personagem</a></li>
+        <li><a href="#use-serie">Perfil da série</a></li>
       </ul>
     </li>
   </ol>
@@ -148,6 +150,43 @@ Aqui temos uma lista das aplicações que são necessárias para ter seu projeto
 - Na listagem temos todos o resultado de todos os personagens encontrados para o termo informado
 
     <img src="docs/searchResult.png" alt="" height="250" />
+
+### <strong id="use-char">Perfil do personagem</strong>
+
+- Na parte superior direita da tela temos o campo de pesquisa de personagem, caso deseje fazer a pesquisa diretamente pela tela da série
+
+    <img src="docs/charSearch.png" alt="" height="50" />
+
+- Já no inicio temos as informações principais do personagem: Foto, titulo, oquantidade de séries que participou e a descrição abaixo caso tenha
+
+    <img src="docs/charInfo.png" alt="" height="250" />
+
+- Logo acima do nome você poderá encontrar um botão de "Editar", ao clicar será aberto o formulário para alteração dos dados (Nome e descrição) do personagem.
+
+    <img src="docs/editButton.png" alt="" height="70" />
+
+    Após finalizada as mudanças clique em <span style="color: #2dce89">ATUALIZAR</span>, caso deseje cancelar as modificações basta clicar em <span style="color: #f31431">CANCELAR</span>
+
+    <img src="docs/charForm.png" alt="" height="270" />
+
+- Na parte inferior você encontrará todos as series nas quais o personagem teve participação, para mais informações da série basta clicar no card para abrir o perfil
+
+    <img src="docs/charSeries.png" alt="" height="300" />
+
+### <strong id="use-serie">Perfil da serie</strong>
+
+- Na parte superior direita da tela temos o campo de pesquisa de personagem, caso deseje fazer a pesquisa diretamente pela tela do personagem
+
+    <img src="docs/charSearch.png" alt="" height="50" />
+
+- Já no inicio temos as informações principais da série: Foto, titulo, o ano inicial/final e a descrição abaixo caso tenha
+
+    <img src="docs/serieInfo.png" alt="" height="250" />
+
+- Na parte inferior você encontrará todos os personagens que participaram dessa série, para mais informações do personagem basta clicar no card para abrir o perfil
+
+    <img src="docs/serieChars.png" alt="" height="250" />
+
 
 <!-- MARKDOWN LINKS -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->

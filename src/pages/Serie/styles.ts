@@ -1,6 +1,7 @@
 import styled, { keyframes } from 'styled-components'
 
 import Wrapper from 'components/Wrapper'
+import Breakpoints from 'styles/breakpoints'
 
 const fadeIn = keyframes`
   from {
@@ -59,12 +60,24 @@ export const Content = styled(Wrapper)`
 
 export const SerieInfo = styled.section`
   display: flex;
+  flex-direction: column;
   margin-top: 20px;
   padding-top: 20px;
 
+  ${Breakpoints.md} {
+    flex-direction: row;
+  }
+
   .thumbnail {
     padding: 20px;
-    margin-right: 20px;
+
+    ${Breakpoints.mdDown} {
+      margin: 0 auto;
+    }
+
+    ${Breakpoints.md} {
+      margin-right: 20px;
+    }
   }
 
   .info {

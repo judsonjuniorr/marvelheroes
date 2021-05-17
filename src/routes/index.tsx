@@ -5,16 +5,21 @@ import Character from 'pages/Character'
 import Search from 'pages/SearchResults'
 import Serie from 'pages/Serie'
 
+import ScrollToTop from './scrollToTop'
+
 const Routes: React.FC = () => {
   return (
-    <Switch>
-      <Route path="/" exact component={Home} />
-      <Route path="/character/:id" exact component={Character} />
-      <Route path="/search" exact component={Search} />
-      <Route path="/serie/:id" exact component={Serie} />
+    <>
+      <ScrollToTop />
+      <Switch>
+        <Route path="/" exact component={Home} />
+        <Route path="/character/:id" exact component={Character} />
+        <Route path="/search" exact component={Search} />
+        <Route path="/serie/:id" exact component={Serie} />
 
-      <Route path="*" component={() => <Redirect to="/" />} />
-    </Switch>
+        <Route path="*" component={() => <Redirect to="/" />} />
+      </Switch>
+    </>
   )
 }
 

@@ -42,6 +42,16 @@ const wallp: { [key: number]: any } = {
     &.groot {
       animation: ${fadeIn} 0.5s ease-in forwards;
     }
+  `,
+  6: css`
+    &.ironMan {
+      animation: ${fadeIn} 0.5s ease-in forwards;
+    }
+  `,
+  7: css`
+    &.spiderMan {
+      animation: ${fadeIn} 0.5s ease-in forwards;
+    }
   `
 }
 
@@ -96,7 +106,7 @@ export const Main = styled.header<IMainProps>`
     position: absolute;
     left: 0;
     right: 0;
-    bottom: 0;
+    bottom: -30px;
     margin: auto;
     min-width: 100vw;
     transform: scaleY(-1);

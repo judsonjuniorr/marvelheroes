@@ -87,7 +87,7 @@ export const CharacterItem = styled.li`
     }
   }
 
-  &:hover {
+  &:hover:not(.pageAction) {
     filter: grayscale(0);
     transform: scale(1.1);
     z-index: 10;

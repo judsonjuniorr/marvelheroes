@@ -20,6 +20,8 @@ import deadPool from 'assets/deadpool.png'
 import antMan from 'assets/ant-man.png'
 import venom from 'assets/venom.png'
 import groot from 'assets/groot.png'
+import ironMan from 'assets/iron-man.png'
+import spiderMan from 'assets/spider-man.png'
 
 import * as S from './styles'
 
@@ -54,7 +56,7 @@ const Home: React.FC = () => {
 
   useEffect(() => {
     /* istanbul ignore next */
-    setInterval(() => setWallpID(old => (old >= 5 ? 1 : old + 1)), 10000)
+    setInterval(() => setWallpID(old => (old >= 7 ? 1 : old + 1)), 10000)
   }, []) // eslint-disable-line
 
   return (
@@ -78,6 +80,8 @@ const Home: React.FC = () => {
         <img src={antMan} alt="" className="character antMan" />
         <img src={venom} alt="" className="character venom" />
         <img src={groot} alt="" className="character groot" />
+        <img src={ironMan} alt="" className="character ironMan" />
+        <img src={spiderMan} alt="" className="character spiderMan" />
         <img src={wave} alt="" className="wave" />
       </S.Main>
       <S.Content>

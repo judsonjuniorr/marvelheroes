@@ -73,7 +73,9 @@ export function* loadAllCharacters({ payload }: LoadAllCharactersRequest) {
 
   const apiCall = async () => {
     return api
-      .get(`/characters`, { params: { limit: perPage, offset } })
+      .get(`/characters`, {
+        params: { limit: perPage, offset }
+      })
       .then(r => r.data)
       .catch(e => {
         throw e

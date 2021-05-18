@@ -1,52 +1,15 @@
-import styled, { keyframes } from 'styled-components'
+import styled, { css, keyframes } from 'styled-components'
 import Breakpoints from 'styles/breakpoints'
 
-const captainwwAnimation = keyframes`
-  from {
-    transform: translate(100%, 100%);
-  }
-  to {
-    transform: translate(0, 0);
-    opacity: 1;
-  }
-`
-
-const spiderAnimation = keyframes`
-  0% {
-    transform: translateY(-100%);
-  }
-  75% {
-    transform: translateY(10%);
-  }
-  100% {
-    transform: translateY(-5%);
-    opacity: 1;
-  }
-`
-
-const ironManAnimation = keyframes`
-  to { opacity: 1; }
-`
-
-const greenLanternAnimation = keyframes`
-  from {
-    transform: translateX(10vw) scaleX(-1);
-  }
-  to {
-    opacity: 0.9;
-    transform: scaleX(-1);
-  }
-`
-
-const superManAnimation = keyframes`
-  from {
-    transform: translateY(100%);
-  }
+const fadeIn = keyframes`
   to {
     opacity: 1;
-    transform: translateY(0);
   }
 `
+
+interface IMainProps {
+  wallpIdx: number
+}
 
 export const Wrapper = styled.div`
   flex: 1;
@@ -54,7 +17,35 @@ export const Wrapper = styled.div`
   flex-direction: column;
 `
 
-export const Main = styled.header`
+const wallp: { [key: number]: any } = {
+  1: css`
+    &.blackPhanter {
+      animation: ${fadeIn} 0.5s ease-in forwards;
+    }
+  `,
+  2: css`
+    &.deadPool {
+      animation: ${fadeIn} 0.5s ease-in forwards;
+    }
+  `,
+  3: css`
+    &.antMan {
+      animation: ${fadeIn} 0.5s ease-in forwards;
+    }
+  `,
+  4: css`
+    &.venom {
+      animation: ${fadeIn} 0.5s ease-in forwards;
+    }
+  `,
+  5: css`
+    &.groot {
+      animation: ${fadeIn} 0.5s ease-in forwards;
+    }
+  `
+}
+
+export const Main = styled.header<IMainProps>`
   position: relative;
   display: flex;
   flex-direction: column;
@@ -69,7 +60,7 @@ export const Main = styled.header`
     height: 100%;
     width: 100%;
     background-color: #000000;
-    background-image: linear-gradient(45deg, #000000 0%, #2c3e50 74%);
+    background-image: linear-gradient(45deg, #000000 35%, #1c2833 80%);
     z-index: -1;
   }
 
@@ -78,55 +69,26 @@ export const Main = styled.header`
     user-select: none;
     pointer-events: none;
     bottom: 0;
+    top: 0;
+    left: 5vw;
+    margin: auto;
+    max-height: 100%;
     z-index: -1;
     transition: all 0.2s;
+    mask-image: linear-gradient(
+      to left,
+      rgba(0, 0, 0, 1) 60%,
+      rgba(0, 0, 0, 0) 100%
+    );
     opacity: 0;
 
-    &.superman {
-      max-width: 26vw;
-      max-height: 90%;
-      animation-name: ${superManAnimation};
-      animation-duration: 1s;
-      animation-fill-mode: forwards;
-    }
+    ${({ wallpIdx }) => wallp[wallpIdx]}
 
-    &.greenlantern {
-      bottom: 15px;
-      max-width: 8vw;
-      max-height: 55%;
-      transform: translateX(10vw) scaleX(-1);
-      left: 27vw;
-    }
-
-    &.ironman {
-      left: 40vw;
-      max-width: 15vw;
-      margin: auto;
-      max-height: 75%;
-      transform: scaleX(-1);
-    }
-
-    &.captainww {
+    ${Breakpoints.lgDown} {
+      max-height: 500px;
+      max-width: 80%;
       right: 0;
-      max-width: 35vw;
-      max-height: 95%;
-      animation-name: ${captainwwAnimation};
-      animation-duration: 1s;
-      animation-fill-mode: forwards;
-    }
-
-    &.spiderman {
-      top: -10%;
-      right: 35vw;
-      max-width: 10vw;
-      mask-image: linear-gradient(
-        to bottom,
-        rgba(0, 0, 0, 0),
-        rgba(0, 0, 0, 1)
-      );
-      animation-name: ${spiderAnimation};
-      animation-duration: 1s;
-      animation-fill-mode: forwards;
+      top: 200px;
     }
   }
 
@@ -134,85 +96,66 @@ export const Main = styled.header`
     position: absolute;
     left: 0;
     right: 0;
-    bottom: -40px;
+    bottom: 0;
     margin: auto;
     min-width: 100vw;
     transform: scaleY(-1);
     user-select: none;
     pointer-events: none;
   }
-
-  ${Breakpoints.mdDown} {
-    .character {
-      &.superman {
-        max-width: 35vw;
-      }
-      &.captainww {
-        max-width: 40vw;
-      }
-      &.ironman {
-        max-width: 20vw;
-        left: 38vw;
-      }
-
-      &.greenlantern {
-        opacity: 0 !important;
-      }
-      &.spiderman {
-        top: 0;
-        right: 5vw;
-        max-width: 15vw;
-      }
-    }
-  }
-
-  ${Breakpoints.smDown} {
-    min-height: 450px;
-    .character {
-      &.ironman {
-        opacity: 0 !important;
-      }
-      &.superman {
-        max-width: 40vw;
-      }
-      &.captainww {
-        max-width: 55vw;
-      }
-    }
-  }
-
-  ${Breakpoints.sm} {
-    .character.ironman {
-      animation-name: ${ironManAnimation};
-      animation-duration: 3s;
-      animation-fill-mode: forwards;
-    }
-  }
-
-  ${Breakpoints.md} {
-    .character.greenlantern {
-      animation-name: ${greenLanternAnimation};
-      animation-duration: 2s;
-      animation-fill-mode: forwards;
-    }
-  }
 `
 
-export const Logo = styled.img`
+export const Logo = styled.div`
+  max-width: 30vw;
   display: flex;
   flex-direction: column;
-  max-height: 150px;
-  height: 100%;
-  width: 100%;
-  max-width: 255px;
-  margin: 0 auto;
-  cursor: pointer;
+  align-self: center;
+  align-items: center;
+  transition: all 0.3s ease;
 
-  ${Breakpoints.md} {
-    margin-left: 26vw;
+  a {
+    img {
+      max-height: 150px;
+      height: 100%;
+      width: 100%;
+      max-width: 250px;
+      cursor: pointer;
+    }
   }
+  > form {
+    margin-top: 30px;
+    width: 400px;
+    max-width: 100%;
+    input {
+      text-align: center;
+    }
+
+    .input-label > div {
+      border-color: rgba(255, 255, 255, 0.4);
+    }
+  }
+
   ${Breakpoints.smDown} {
-    max-width: 70%;
+    max-width: 80%;
+  }
+
+  ${Breakpoints.lg} {
+    align-self: flex-end;
+    align-items: flex-end;
+    margin-right: 6vw;
+    margin-top: 50px;
+
+    a,
+    > form {
+      align-self: flex-end;
+
+      img {
+        max-height: 250px;
+      }
+      input {
+        text-align: left;
+      }
+    }
   }
 `
 

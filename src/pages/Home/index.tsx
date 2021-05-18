@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { useHistory, useLocation } from 'react-router-dom'
+import { Link, useHistory, useLocation } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 import useDocumentTitle from 'helpers/useDocumentTitle'
 
@@ -15,11 +15,11 @@ import CharacterList from 'components/CharacterList'
 
 import wave from 'assets/wave.svg'
 import logo from 'assets/logo.svg'
-import ironMan from 'assets/iron-man.png'
-import superMan from 'assets/super-man.png'
-import spiderMan from 'assets/spider-man.png'
-import greenLantern from 'assets/green-lantern.png'
-import captainWonderWoman from 'assets/captain-and-wonder-woman.png'
+import blackPanther from 'assets/black-phanter.png'
+import deadPool from 'assets/deadpool.png'
+import antMan from 'assets/ant-man.png'
+import venom from 'assets/venom.png'
+import groot from 'assets/groot.png'
 
 import * as S from './styles'
 
@@ -27,6 +27,7 @@ const Home: React.FC = () => {
   const dispatch = useDispatch()
   const history = useHistory()
   const location = useLocation()
+  const [wallpID, setWallpID] = useState(1)
   useDocumentTitle()
 
   const { loadError, total, page } = useSelector<IState, ICharactersState>(
@@ -51,32 +52,36 @@ const Home: React.FC = () => {
       })
   }, [loadError])
 
+  useEffect(() => {
+    /* istanbul ignore next */
+    setInterval(() => setWallpID(old => (old >= 5 ? 1 : old + 1)), 10000)
+  }, []) // eslint-disable-line
+
   return (
     <S.Wrapper>
-      <S.Main>
-        <S.Logo
-          src={logo}
-          alt="MARVEL HEROES"
-          data-testid="app-logo"
-          onClick={() => {
-            history.push('/')
-            /* istanbul ignore else */
-            if (page !== 1) dispatch(loadAllCharactersRequest(1))
-          }}
-        />
+      <S.Main wallpIdx={wallpID}>
+        <S.Logo>
+          <Link
+            data-testid="app-logo"
+            to="/"
+            onClick={() => {
+              if (page !== 1) dispatch(loadAllCharactersRequest(1))
+            }}
+          >
+            <img src={logo} alt="MARVEL HEROES" />
+          </Link>
+          <Search />
+        </S.Logo>
 
-        <img src={superMan} alt="" className="character superman" />
-        <img src={greenLantern} alt="" className="character greenlantern" />
-        <img src={ironMan} alt="" className="character ironman" />
-        <img src={captainWonderWoman} alt="" className="character captainww" />
-        <img src={spiderMan} alt="" className="character spiderman" />
+        <img src={blackPanther} alt="" className="character blackPhanter" />
+        <img src={deadPool} alt="" className="character deadPool" />
+        <img src={antMan} alt="" className="character antMan" />
+        <img src={venom} alt="" className="character venom" />
+        <img src={groot} alt="" className="character groot" />
         <img src={wave} alt="" className="wave" />
       </S.Main>
       <S.Content>
         <Wrapper>
-          <S.Section>
-            <Search />
-          </S.Section>
           <S.Section>
             <strong>TODOS OS PERSONAGENS</strong>
             <small>

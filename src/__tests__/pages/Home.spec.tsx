@@ -75,7 +75,6 @@ describe('Home page', () => {
     fireEvent.click(logo)
 
     await waitFor(() => {
-      expect(mockHistoryPush).toHaveBeenCalledWith('/')
       expect(mockDispatch).toHaveBeenCalledWith(loadAllCharactersRequest(1))
     })
   })

@@ -15,9 +15,9 @@
 
   <p align="center">
     <br />
-    <i>"A única maneira de saber o quão forte você é, é continuar testando seus limites."</i>
+    <i>"Nós somos quem escolhemos ser... Por isso, escolha!"</i>
     <br >
-    <small style="opacity: 0.7">Clark Kent / Kal-El (Superman)</small>
+    <small style="opacity: 0.7">Homem-Aranha</small>
     <br />
     <br />
     <a href="https://marvelheroes.judsonjunior.com/"><strong>Visualizar demo</strong></a>
